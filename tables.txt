@@ -1,0 +1,43 @@
+user_info
+    user_id
+    user_name
+
+user_security
+    user_id
+    user_email
+    user_password
+
+user_follow
+    user_id
+    follow_id
+
+post_info
+    post_id
+    post_title
+    post_text
+    post_time
+    user_id
+
+comment_info
+    comment_id
+    comment_text
+    target_id
+    user_id
+
+photo_info
+    photo_id
+    photo_time
+    user_id
+
+post_photo
+    post_id
+    photo_id
+    photo_sequence
+
+tag_info
+    tag_id
+    tag_name
+
+post_tag
+    post_id
+    tag_id
