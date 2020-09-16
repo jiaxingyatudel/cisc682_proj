@@ -21,6 +21,7 @@ post_info
 comment_info
     comment_id
     comment_text
+    comment_time
     target_id
     user_id
 
