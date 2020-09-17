@@ -9,7 +9,7 @@ from pymysql.constants import CLIENT
 database_user=input("Please input database user name: ")
 database_password=input("Please input database password: ")
 
-conn=pymysql.connect(host="localhost",user=database_user,password=database_password,client_flag=CLIENT.MULTI_STATEMENTS)
+conn=pymysql.connect(host="localhost",user=database_user,password=database_password,autocommit=True,client_flag=CLIENT.MULTI_STATEMENTS)
 cursor=conn.cursor()
 
 sql="""
