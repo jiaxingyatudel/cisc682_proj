@@ -49,7 +49,6 @@ class LoremIpsum:
         sentence=sentence.capitalize()
         return sentence
 
-
     def generate_paragraph(self,sentence_cnt_min=4,sentence_cnt_max=8,word_cnt_min=8,word_cnt_max=16,comma_max_density=4):
         sentence_cnt=random.randint(sentence_cnt_min,sentence_cnt_max)
 
@@ -61,7 +60,6 @@ class LoremIpsum:
                 paragraph+=" "
 
         return paragraph
-
 
 if __name__=="__main__":
     lorem_ipsum=LoremIpsum()
