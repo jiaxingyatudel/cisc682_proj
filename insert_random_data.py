@@ -19,11 +19,57 @@ FOLLOW_USER_CNT_MIN=0
 FOLLOW_USER_CNT_MAX=4
 USER_POST_CNT_MIN=0
 USER_POST_CNT_MAX=4
+POST_INGREDIENT_CNT_MIN=4
+POST_INGREDIENT_CNT_MAX=8
+USER_LIKE_POST_CNT_MIN=4
+USER_LIKE_POST_CNT_MAX=8
 POST_COMMENT_CNT_MIN=0
 POST_COMMENT_CNT_MAX=4
 TAG_CNT=8
 POST_TAG_CNT_MIN=1
 POST_TAG_CNT_MAX=4
+USER_FOLLOW_TAG_CNT_MIN=2
+USER_FOLLOW_TAG_CNT_MAX=4
+
+sql_insert_user_info="""
+insert into user_info (user_id,user_name) values ('{user_id}','{user_name}');
+"""
+
+sql_insert_user_security="""
+insert into user_security (user_id,user_email,user_password) values ('{user_id}','{user_email}','{user_password}');
+"""
+
+sql_insert_user_follow="""
+insert into user_follow (user_id,follow_id) values ('{user_id}','{follow_id}');
+"""
+
+sql_insert_post_info="""
+insert into post_info (post_id,post_title,post_text,post_time,user_id) values ('{post_id}','{post_title}','{post_text}','{post_time}','{user_id}');
+"""
+
+sql_insert_post_ingredient="""
+insert into post_ingredient (post_id,ingredient,ingredient_sequence) values ('{post_id}','{ingredient}','{ingredient_sequence}');
+"""
+
+sql_insert_user_like_post="""
+insert into user_like_post (user_id,post_id) values ('{user_id}','{post_id}');
+"""
+
+sql_insert_comment_info="""
+insert into comment_info (comment_id,comment_text,comment_time,user_id,post_id) values ('{comment_id}','{comment_text}','{comment_time}','{user_id}','{post_id}');
+"""
+
+sql_insert_tag_info="""
+insert into tag_info (tag_id,tag_name) values ('{tag_id}','{tag_name}');
+"""
+
+sql_insert_post_tag="""
+insert into post_tag (post_id,tag_id) values ('{post_id}','{tag_id}');
+"""
+
+sql_insert_user_follow_tag="""
+insert into user_follow_tag (user_id,tag_id) values ('{user_id}','{tag_id}');
+"""
 
 class UserPool:
     def __init__(self):
@@ -90,41 +136,14 @@ comment_pool=CommentPool()
 tag_pool=TagPool()
 
 ###
-
 database_user=input("Please input database user name: ")
 database_password=input("Please input database password: ")
 
 conn=pymysql.connect(host="localhost",user=database_user,password=database_password,database="cisc637",autocommit=True,client_flag=CLIENT.MULTI_STATEMENTS)
 cursor=conn.cursor()
 
-sql_insert_user_info="""
-insert into user_info (user_id,user_name) values ('{user_id}','{user_name}');
-"""
-
-sql_insert_user_security="""
-insert into user_security (user_id,user_email,user_password) values ('{user_id}','{user_email}','{user_password}');
-"""
-
-sql_insert_user_follow="""
-insert into user_follow (user_id,follow_id) values ('{user_id}','{follow_id}');
-"""
-
-sql_insert_post_info="""
-insert into post_info (post_id,post_title,post_text,post_time,user_id) values ('{post_id}','{post_title}','{post_text}','{post_time}','{user_id}');
-"""
-
-sql_insert_comment_info="""
-insert into comment_info (comment_id,comment_text,comment_time,user_id,post_id) values ('{comment_id}','{comment_text}','{comment_time}','{user_id}','{post_id}');
-"""
-
-sql_insert_tag_info="""
-insert into tag_info (tag_id,tag_name) values ('{tag_id}','{tag_name}');
-"""
-
-sql_insert_post_tag="""
-insert into post_tag (post_id,tag_id) values ('{post_id}','{tag_id}');
-"""
-
+#user_info
+#user_security
 for i in range(USER_CNT):
     name=random_name_pool.generate_name()
 
@@ -143,6 +162,7 @@ for i in range(len(user_pool.users)):
     cursor.execute(sql_insert_user_info.format(user_id=user["user_id"],user_name=user["user_name"]))
     cursor.execute(sql_insert_user_security.format(user_id=user["user_id"],user_email=user["user_email"],user_password=user["user_password"]))
 
+#user_follow
 for i in range(len(user_pool.users)):
     user=user_pool.users[i]
 
@@ -161,6 +181,7 @@ for i in range(len(user_pool.users)):
         follow_user=user_pool.users[follow_user_index_pool[j]]
         cursor.execute(sql_insert_user_follow.format(user_id=user["user_id"],follow_id=follow_user["user_id"]))
 
+#post_info
 for i in range(len(user_pool.users)):
     user=user_pool.users[i]
     post_cnt=random.randint(USER_POST_CNT_MIN,USER_POST_CNT_MAX)
@@ -185,6 +206,32 @@ for i in range(len(post_pool.posts)):
         user_id=post["user_id"],
     ))
 
+#post_ingredient
+for i in range(len(post_pool.posts)):
+    post=post_pool.posts[i]
+    ingredient_cnt=random.randint(POST_INGREDIENT_CNT_MIN,POST_INGREDIENT_CNT_MAX)
+    ingredient_pool=random.sample(lorem_ipsum.lorem_ipsum_words,ingredient_cnt)
+    for j in range(len(ingredient_pool)):
+        ingredient=ingredient_pool[j]
+        cursor.execute(sql_insert_post_ingredient.format(
+            post_id=post["post_id"],
+            ingredient=ingredient.capitalize(),
+            ingredient_sequence=j
+        ))
+
+#user_like_post
+for i in range(len(user_pool.users)):
+    user=user_pool.users[i]
+    like_post_cnt=random.randint(USER_LIKE_POST_CNT_MIN,USER_LIKE_POST_CNT_MAX)
+    like_psot_sample=random.sample(post_pool.posts,like_post_cnt)
+    for j in range(len(like_psot_sample)):
+        post=like_psot_sample[j]
+        cursor.execute(sql_insert_user_like_post.format(
+            user_id=user["user_id"],
+            post_id=post["post_id"]
+        ))
+
+#comment_info
 for i in range(len(post_pool.posts)):
     post=post_pool.posts[i]
     comment_cnt=random.randint(POST_COMMENT_CNT_MIN,POST_COMMENT_CNT_MAX)
@@ -209,20 +256,11 @@ for i in range(len(comment_pool.comments)):
         post_id=comment["post_id"],
     ))
 
-while(True):
-    if len(tag_pool.tags)>=TAG_CNT:
-        break
-
-    tag_name=lorem_ipsum.lorem_ipsum_words[random.randint(9,len(lorem_ipsum.lorem_ipsum_words)-1)]
-
-    tag_name_duplicate=False
-    for i in range(len(tag_pool.tags)):
-        if tag_name==tag_pool.tags[i]["tag_name"]:
-            tag_name_duplicate=True
-            break
-
-    if not tag_name_duplicate:
-        tag_pool.new_tag_info(tag_name.capitalize())
+#tag_info
+tag_name_pool=random.sample(lorem_ipsum.lorem_ipsum_words,TAG_CNT)
+for i in range(len(tag_name_pool)):
+    tag_name=tag_name_pool[i]
+    tag_pool.new_tag_info(tag_name.capitalize())
 
 for i in range(len(tag_pool.tags)):
     tag=tag_pool.tags[i]
@@ -231,22 +269,27 @@ for i in range(len(tag_pool.tags)):
         tag_name=tag["tag_name"]
     ))
 
+#post_tag
 for i in range(len(post_pool.posts)):
     post=post_pool.posts[i]
     tag_cnt=random.randint(POST_TAG_CNT_MIN,POST_TAG_CNT_MAX)
-
-    tag_index_pool=[]
-    while(True):
-        if(len(tag_index_pool)>=tag_cnt):
-            break
-        tag_index=random.randint(0,len(tag_pool.tags)-1)
-        if(tag_index not in tag_index_pool):
-            tag_index_pool.append(tag_index)
-
-    for j in range(len(tag_index_pool)):
-        tag=tag_pool.tags[tag_index_pool[j]]
+    tag_sample=random.sample(tag_pool.tags,tag_cnt)
+    for j in range(len(tag_sample)):
+        tag=tag_sample[j]
         cursor.execute(sql_insert_post_tag.format(
             post_id=post["post_id"],
+            tag_id=tag["tag_id"]
+        ))
+
+#user_follow_tag
+for i in range(len(user_pool.users)):
+    user=user_pool.users[i]
+    tag_cnt=random.randint(USER_FOLLOW_TAG_CNT_MIN,USER_FOLLOW_TAG_CNT_MAX)
+    tag_sample=random.sample(tag_pool.tags,tag_cnt)
+    for j in range(len(tag_sample)):
+        tag=tag_sample[j]
+        cursor.execute(sql_insert_user_follow_tag.format(
+            user_id=user["user_id"],
             tag_id=tag["tag_id"]
         ))
 
