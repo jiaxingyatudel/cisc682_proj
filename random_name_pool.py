@@ -1,22 +1,28 @@
 #!/usr/bin/env python3
 
-import random
+# names are derived from 1990 Census data
 
-FAMILY_NAMES_FILE_PATH="./family_names.txt"
-GIVEN_NAMES_FILE_PATH="./given_names.txt"
+import random
 
 class RandomNamePool:
     def __init__(self):
         self.used_names=[]
 
-        family_names_file=open(FAMILY_NAMES_FILE_PATH,'r')
-        self.family_name_list=[name.split('\n')[0] for name in family_names_file.readlines()]
-        given_names_file=open(GIVEN_NAMES_FILE_PATH,'r')
-        self.given_name_list=[name.split('\n')[0] for name in given_names_file.readlines()]
-        family_names_file.close()
-        given_names_file.close()
+        last_names_file=open("./last_names.txt","r")
+        self.last_names=[name.split('\n')[0] for name in last_names_file.readlines()]
+        last_names_file.close()
 
-        self.capacity=len(self.family_name_list)*len(self.given_name_list)
+        first_names_female_file=open("./first_names_female.txt","r")
+        first_names_female=[name.split('\n')[0] for name in first_names_female_file.readlines()]
+        first_names_female_file.close()
+
+        first_names_male_file=open("./first_names_male.txt","r")
+        first_names_male=[name.split('\n')[0] for name in first_names_male_file.readlines()]
+        first_names_male_file.close()
+
+        self.first_names=first_names_female+first_names_male
+
+        self.capacity=len(self.first_names)*len(self.last_names)
 
     def generate_name(self):
         if len(self.used_names)>=self.capacity:
@@ -24,13 +30,19 @@ class RandomNamePool:
 
         while(True):
             name={
-                "family_name":self.family_name_list[random.randint(0,len(self.family_name_list)-1)],
-                "given_name":self.given_name_list[random.randint(0,len(self.given_name_list)-1)]
+                "first_name":self.first_names[random.randint(0,len(self.first_names)-1)],
+                "last_name":self.last_names[random.randint(0,len(self.last_names)-1)]
             }
 
             if name not in self.used_names:
                 self.used_names.append(name)
                 return name
+
+    def pick_name(self):
+        return {
+            "first_name":self.first_names[random.randint(0,len(self.first_names)-1)],
+            "last_name":self.last_names[random.randint(0,len(self.last_names)-1)]
+        }
 
 if __name__=="__main__":
     random_name_pool=RandomNamePool()
@@ -42,4 +54,4 @@ if __name__=="__main__":
         if not name:
             break
         else:
-            print(name["given_name"],name["family_name"],cnt)
+            print(name["first_name"],name["last_name"],cnt)

@@ -145,14 +145,14 @@ cursor=conn.cursor()
 #user_info
 #user_security
 for i in range(USER_CNT):
-    name=random_name_pool.generate_name()
+    name=random_name_pool.pick_name()
 
     if not name:
         break
 
     user=user_pool.new_user_info(
-        "{given_name} {family_name}".format(given_name=name["given_name"],family_name=name["family_name"]),
-        "{given_name}.{family_name}@example.com".format(given_name=name["given_name"],family_name=name["family_name"])
+        "{first_name} {last_name}".format(first_name=name["first_name"],last_name=name["last_name"]),
+        "{first_name}.{last_name}@example.com".format(first_name=name["first_name"],last_name=name["last_name"])
     )
 
     user["user_password"]=hashlib.sha256("PASSWORD".encode("utf-8")).hexdigest()
