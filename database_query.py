@@ -3,6 +3,7 @@
 import pymysql
 
 import uuid
+import hashlib
 
 sql_insert_user_info="""
 insert into user_info (user_id,user_name) values ('{user_id}','{user_name}');
@@ -22,6 +23,14 @@ select * from user_info where user_id='{user_id}';
 
 sql_insert_user_security="""
 insert into user_security (user_id,user_email,user_password) values ('{user_id}','{user_email}','{user_password}');
+"""
+
+sql_select_user_security_by_user_email_user_password="""
+select * from user_security where user_email='{user_email}' and user_password='{user_password}';
+"""
+
+sql_select_user_security_by_user_email="""
+select * from user_security where user_email='{user_email}';
 """
 
 class DatabaseQuery:
@@ -53,13 +62,22 @@ class DatabaseQuery:
         return self.cursor.fetchall()
 
     def insert_user_security(self,user_id,user_email,user_password):
-        self.cursor.execute(sql_insert_user_security.format(user_id=user_id,user_email=user_email,user_password=user_password))
+        user_password_hash=hashlib.sha256(user_password.encode("utf-8")).hexdigest()
+        self.cursor.execute(sql_insert_user_security.format(user_id=user_id,user_email=user_email,user_password=user_password_hash))
         return {
             "user_id":user_id,
             "user_email":user_email,
             "user_password":user_password
         }
 
+    def check_user_security(self,user_email,user_password):
+        user_password_hash=hashlib.sha256(user_password.encode("utf-8")).hexdigest()
+        self.cursor.execute(sql_select_user_security_by_user_email_user_password.format(user_email=user_email,user_password=user_password_hash))
+        return self.cursor.fetchall()
+
+    def check_user_security_email(self,user_email):
+        self.cursor.execute(sql_select_user_security_by_user_email.format(user_email=user_email))
+        return self.cursor.fetchall()
 
 if __name__=="__main__":
     database_user=input("[database user name]")

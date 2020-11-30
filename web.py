@@ -6,8 +6,6 @@ from flask import jsonify
 
 import pymysql
 
-import hashlib
-
 from database_query import DatabaseQuery
 
 database_user=input("[database user name]")
@@ -28,17 +26,56 @@ def user_register():
     user_email=req["user_email"]
     user_password=req["user_password"]
 
-    user_password_hash=hashlib.sha256(user_password.encode("utf-8")).hexdigest()
+    query=database.check_user_security_email(user_email)
+    
+    if(len(query)>0):
+        resp=jsonify(
+            err=1,#email already registered
+            user_id=False
+        )
+        return resp
+    else:
+        user_info=database.insert_user_info(user_name)
+        user_id=user_info["user_id"]
 
-    user_info=database.insert_user_info(user_name)
+        database.insert_user_security(user_id,user_email,user_password)
 
-    user_id=user_info["user_id"]
+        resp=jsonify(
+            err=False,
+            user_id=user_id,
+            user_name=user_name,
+            user_email=user_email
+        )
+        return resp
 
-    database.insert_user_security(user_id,user_email,user_password_hash)
+@app.route("/user_login",methods=["POST"])
+def user_login():
+    req=request.get_json(force=True)
+    user_email=req["user_email"]
+    user_password=req["user_password"]
 
-    resp=jsonify(user_id=user_id,user_name=user_name,user_email=user_email)
-    resp.set_cookie("user_id",user_id)
-    return resp
+    query=database.check_user_security(user_email,user_password)
+
+    if(len(query)<=0):
+        resp=jsonify(
+            err=1,#no match found
+            user_id=False
+        )
+        return resp
+    else:
+        user_id=query[0]["user_id"]
+        user_email=query[0]["user_email"]
+
+        user_info=database.select_user_info_by_user_id(user_id)[0]
+        user_name=user_info["user_name"]
+
+        resp=jsonify(
+            err=0,
+            user_id=user_id,
+            user_name=user_name,
+            user_email=user_email
+        )
+        return resp
 
 if __name__ == '__main__':
     app.run()

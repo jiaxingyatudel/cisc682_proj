@@ -27,7 +27,8 @@ create table user_security(
     user_email varchar(255),
     user_password varchar(255),
     primary key (user_id),
-    foreign key (user_id) references user_info(user_id) on delete cascade
+    foreign key (user_id) references user_info(user_id) on delete cascade,
+    unique (user_email)
 );
 
 create table user_follow(
