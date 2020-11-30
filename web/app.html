@@ -7,13 +7,16 @@
     <body>
         <div id="app">
             <div id="user">
-                <div id="user_btn">
+                <div id="user_btn_container">
                     <div v-if="!user_id">
                         <button type="button" class="btn btn-secondary" v-on:click="click_register_btn">Regiter</button>
                         <button type="button" class="btn btn-outline-secondary" v-on:click="click_login_btn">Login</button>
                     </div>
                     <div v-if="user_id">
-                        <button type="button" class="btn btn-outline-secondary" v-on:click="click_user_btn">{{user_name}}</button>
+                        <div id="user_btn" v-on:click="click_user_btn">
+                            <div id="user_btn_icon"><i class="fa fa-user-circle" aria-hidden="true"></i></div>
+                            <div id="user_btn_name">{{user_name}}</div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal" data-backdrop="static" data-keyboard="false" id="user_modal">
@@ -90,6 +93,7 @@
                                     <div>{{user_id}}</div>
                                     <div>{{user_name}}</div>
                                     <div>{{user_email}}</div>
+                                    <button type="button" class="btn btn-danger" v-on:click="click_user_logout()">Logout</button>
                                 </div>
                             </div>
                         </div>

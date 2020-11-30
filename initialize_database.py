@@ -31,6 +31,14 @@ create table user_security(
     unique (user_email)
 );
 
+create table user_cookie(
+    user_id varchar(255),
+    user_cookie_value varchar(255),
+    user_cookie_time_stamp int,
+    primary key (user_cookie_value),
+    foreign key (user_id) references user_info(user_id) on delete cascade
+);
+
 create table user_follow(
     user_id varchar(255),
     follow_id varchar(255),

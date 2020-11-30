@@ -4,6 +4,7 @@ import pymysql
 
 import uuid
 import hashlib
+import time
 
 sql_insert_user_info="""
 insert into user_info (user_id,user_name) values ('{user_id}','{user_name}');
@@ -33,6 +34,30 @@ sql_select_user_security_by_user_email="""
 select * from user_security where user_email='{user_email}';
 """
 
+sql_check_user_security_by_user_id="""
+select * from user_security where user_id='{user_id}';
+"""
+
+sql_insert_user_cookie="""
+insert into user_cookie (user_id,user_cookie_value,user_cookie_time_stamp) values ('{user_id}','{user_cookie_value}','{user_cookie_time_stamp}');
+"""
+
+sql_select_user_cookie_by_user_cookie_value="""
+select * from user_cookie where user_cookie_value='{user_cookie_value}';
+"""
+
+sql_update_user_cookie_by_user_cookie_value="""
+update user_cookie set user_cookie_time_stamp='{user_cookie_time_stamp}' where user_cookie_value='{user_cookie_value}';
+"""
+
+sql_delete_user_cookie_by_user_cookie_value="""
+delete from user_cookie where user_cookie_value='{user_cookie_value}';
+"""
+
+sql_delete_user_cookie_by_user_id="""
+delete from user_cookie where user_id='{user_id}';
+"""
+
 class DatabaseQuery:
     def __init__(self,database_user,database_password):
         conn=pymysql.connect(host="localhost",user=database_user,password=database_password,database="cisc637",autocommit=True)
@@ -48,7 +73,6 @@ class DatabaseQuery:
 
     def delete_user_info_by_user_id(self,user_id):
         self.cursor.execute(sql_delete_user_info_by_user_id.format(user_id=user_id))
-        return {"user_id":user_id}
 
     def update_user_info_user_name_by_user_id(self,user_id,user_name):
         self.cursor.execute(sql_update_user_info_user_name_by_user_id.format(user_id=user_id,user_name=user_name))
@@ -75,9 +99,41 @@ class DatabaseQuery:
         self.cursor.execute(sql_select_user_security_by_user_email_user_password.format(user_email=user_email,user_password=user_password_hash))
         return self.cursor.fetchall()
 
-    def check_user_security_email(self,user_email):
+    def check_user_security_by_user_email(self,user_email):
         self.cursor.execute(sql_select_user_security_by_user_email.format(user_email=user_email))
         return self.cursor.fetchall()
+
+    def check_user_security_by_user_id(self,user_id):
+        self.cursor.execute(sql_check_user_security_by_user_id.format(user_id=user_id))
+        return self.cursor.fetchall()
+
+    def insert_user_cookie(self,user_id):
+        cookie=uuid.uuid4().hex
+        time_stamp=int(time.time())
+        self.cursor.execute(sql_insert_user_cookie.format(user_id=user_id,user_cookie_value=cookie,user_cookie_time_stamp=time_stamp))
+        return {
+            "user_id":user_id,
+            "user_cookie_value":cookie,
+            "user_cookie_time_stamp":time_stamp
+        }
+
+    def check_user_cookie_by_user_cookie_value(self,user_cookie_value):
+        self.cursor.execute(sql_select_user_cookie_by_user_cookie_value.format(user_cookie_value=user_cookie_value))
+        return self.cursor.fetchall()
+
+    def update_user_cookie_by_user_cookie_value(self,user_cookie_value):
+        time_stamp=int(time.time())
+        self.cursor.execute(sql_update_user_cookie_by_user_cookie_value.format(user_cookie_value=user_cookie_value,user_cookie_time_stamp=time_stamp))
+        return {
+            "user_cookie_value":user_cookie_value,
+            "user_cookie_time_stamp":time_stamp
+        }
+
+    def delete_user_cookie_by_user_cookie_value(self,user_cookie_value):
+        self.cursor.execute(sql_delete_user_cookie_by_user_cookie_value.format(user_cookie_value=user_cookie_value))
+
+    def delete_user_cookie_by_user_id(self,user_id):
+        self.cursor.execute(sql_delete_user_cookie_by_user_id.format(user_id=user_id))
 
 if __name__=="__main__":
     database_user=input("[database user name]")
