@@ -6,9 +6,8 @@
 import pymysql
 from pymysql.constants import CLIENT
 
-database_user=input("Please input database user name: ")
-database_password=input("Please input database password: ")
-
+database_user=input("[database user name]")
+database_password=input("[database password]")
 conn=pymysql.connect(host="localhost",user=database_user,password=database_password,autocommit=True,client_flag=CLIENT.MULTI_STATEMENTS)
 cursor=conn.cursor()
 

@@ -4,7 +4,6 @@
 #Use this script after initialize_database.py
 
 import pymysql
-from pymysql.constants import CLIENT
 
 import random
 import uuid
@@ -136,10 +135,9 @@ comment_pool=CommentPool()
 tag_pool=TagPool()
 
 ###
-database_user=input("Please input database user name: ")
-database_password=input("Please input database password: ")
-
-conn=pymysql.connect(host="localhost",user=database_user,password=database_password,database="cisc637",autocommit=True,client_flag=CLIENT.MULTI_STATEMENTS)
+database_user=input("[database user name]")
+database_password=input("[database password]")
+conn=pymysql.connect(host="localhost",user=database_user,password=database_password,database="cisc637",autocommit=True)
 cursor=conn.cursor()
 
 #user_info

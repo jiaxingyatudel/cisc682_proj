@@ -2,3 +2,11 @@
     box-sizing: border-box;
     font-family: sans-serif;
 }
+
+.user_register_input_group{
+    margin-bottom: 10px;
+}
+
+.user_register_input_group_prepend>span{
+    width: 120px;
+}
