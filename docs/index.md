@@ -22,11 +22,17 @@ The designer and prototype sketcher, mainly studied social network software desi
 
 ### Survey
 
-(WORKING IN PROGRESS)
+To research on needs of sharing and learning cooking recipes, a survey was made and posted on the Internet. The survey was distrubuted mainly to fellow students and close friend and family members. By this time (December 1, 2020), 12 responses are collected.
+
+This [link](https://docs.google.com/forms/d/e/1FAIpQLSe6FNNFOBVXOURQfh4W6RaSL6ExfVbgYcQJPau--7qes3nZqw/viewform?usp=sf_link) directs to the online survey.
+
+The responses indicate that learning cooking reciepes by social network is common among respondents. Almost all of them use one or more social network platforms, and more than half of them are learning cooking reciepes on them. However, the most popular form of cooking recipe sharing is videos on Youtube or other localized video sharing platforms rather than social networks based on text and photos. Also, very few of respondents who frequently cook for themselves are willing to share their recipes, which represents a potential challenge on the quantity and quality of the contents of the product.
+
+This [link](./survey_findings.md) represents survey feedback statistics.
 
 ### Interview
 
-(WORKING IN PROGRESS)
+Three fellow students were interviewed on potential needs of recipe sharing social networks. The interview went informally and unstructured. The finds of the survey was shared to in the interview, the interviewees agreed on the need of learning cooking recipes on social network, and the fact that the form of videos have advantages of presenting cooking contents compared to texts and photos. Possible solutions were brainstormed and disscussed, but none of them was found pratical or implementable. 
 
 ## Prototypes
 
