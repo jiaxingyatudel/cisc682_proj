@@ -50,4 +50,4 @@ This [link]() is an example of candidate webpage prototype.
 
 * [Link to proposal document](./cisc682_proposal.pdf)
 
-* [Link to presentation slides]()
+* [Link to presentation slides](./cisc682_presentation.pdf)
