@@ -6,17 +6,45 @@
     </head>
     <body>
         <div id="app">
+            <div id="home">
+                <div id="home_search">
+                    <h1 id="home_title">Tomato Hot Pot</h1>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search for category">
+                        <div class="input-group-append">
+                            <button class="btn btn-dark" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="menu">
+                <div id="menu_btn_container">
+                    <button id="menu_btn" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="menu_btn">
+                        <a class="dropdown-item" href="#liked"><i class="fa fa-heart" aria-hidden="true"></i> Liked recipes</a>
+                        <a class="dropdown-item" href="#my"><i class="fa fa-pencil" aria-hidden="true"></i> My recipes</a>
+                    </div>
+                </div>
+            </div>
+            <div id="compose">
+                <div id="compose_btn_container" v-if="user_id">
+                    <button type="button" class="btn btn-dark" id="compose_btn">
+                        <span><i class="fa fa-pencil" aria-hidden="true"></i></span><span id="share_your_recipe">Share your recipe</span>
+                    </button>
+                </div>
+            </div>
             <div id="user">
                 <div id="user_btn_container">
                     <div v-if="!user_id">
-                        <button type="button" class="btn btn-secondary" v-on:click="click_register_btn">Regiter</button>
-                        <button type="button" class="btn btn-outline-secondary" v-on:click="click_login_btn">Login</button>
+                        <button type="button" class="btn btn-light" v-on:click="click_register_btn">Register</button>
+                        <button type="button" class="btn btn-dark" v-on:click="click_login_btn">Login</button>
                     </div>
                     <div v-if="user_id">
-                        <div id="user_btn" v-on:click="click_user_btn">
-                            <div id="user_btn_icon"><i class="fa fa-user-circle" aria-hidden="true"></i></div>
-                            <div id="user_btn_name">{{user_name}}</div>
-                        </div>
+                        <button type="button" class="btn btn-dark" v-on:click="click_user_btn">
+                            <i class="fa fa-user-circle" aria-hidden="true"></i> {{user_name}}
+                        </button>
                     </div>
                 </div>
                 <div class="modal" data-backdrop="static" data-keyboard="false" id="user_modal">
