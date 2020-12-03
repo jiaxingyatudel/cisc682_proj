@@ -7,7 +7,7 @@
     <body>
         <div id="app">
             <div id="router">
-                <div id="home">
+                <div id="home" v-if="component=='HOME'">
                     <div id="home_search">
                         <h1 id="home_title">Tomato Hot Pot</h1>
                         <div class="input-group">
@@ -18,6 +18,8 @@
                         </div>
                     </div>
                 </div>
+                <div id="my" v-if="component=='MY'"></div>
+                <div id="like" v-if="component=='LIKE'"></div>
             </div>
             <div id="menu">
                 <div id="menu_btn_container" v-if="user_id">
@@ -25,7 +27,7 @@
                         <i class="fa fa-bars" aria-hidden="true"></i>
                       </button>
                       <div class="dropdown-menu" aria-labelledby="menu_btn">
-                        <a class="dropdown-item" href="#liked"><i class="fa fa-heart" aria-hidden="true"></i> Liked recipes</a>
+                        <a class="dropdown-item" href="#like"><i class="fa fa-heart" aria-hidden="true"></i> Liked recipes</a>
                         <a class="dropdown-item" href="#my"><i class="fa fa-pencil" aria-hidden="true"></i> My recipes</a>
                     </div>
                 </div>

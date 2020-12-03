@@ -1,3 +1,18 @@
+let hash={
+    current_hash:window.location.hash
+}
+
+window.addEventListener("hashchange",()=>{
+    hash.current_hash=window.location.hash
+},false);
+
+const routes={
+    "":"HOME",
+    "#home":"HOME",
+    "#my":"MY",
+    "#like":"LIKE"
+};
+
 let user_data={
     user_id:false,
     user_name:false,
@@ -11,6 +26,25 @@ let user_data={
     login_user_password:"",
     login_user_passsword_input_toggle:false,
 }
+
+let router=new Vue({
+    el:"#router",
+    data:hash,
+    computed:{
+        component:function(){
+            if(!(this.current_hash in routes)){
+                return "HOME";
+            }else{
+                return routes[this.current_hash];
+            }
+        }
+    }
+});
+
+let home=new Vue({
+    el:"#home",
+    data:{}
+});
 
 let menu=new Vue({
     el:"#menu",
