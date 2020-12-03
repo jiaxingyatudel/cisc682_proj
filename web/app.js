@@ -12,6 +12,18 @@ let user_data={
     login_user_passsword_input_toggle:false,
 }
 
+let menu=new Vue({
+    el:"#menu",
+    data:user_data,
+    methods:{}
+});
+
+let compose=new Vue({
+    el:"#compose",
+    data:user_data,
+    methods:{}
+});
+
 let user=new Vue({
     el:"#user",
     data:user_data,
@@ -132,4 +144,4 @@ let user=new Vue({
             this.user_login_register_toogle=b;
         }
     }
-})
+});

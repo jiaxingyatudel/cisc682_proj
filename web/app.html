@@ -6,19 +6,21 @@
     </head>
     <body>
         <div id="app">
-            <div id="home">
-                <div id="home_search">
-                    <h1 id="home_title">Tomato Hot Pot</h1>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for category">
-                        <div class="input-group-append">
-                            <button class="btn btn-dark" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+            <div id="router">
+                <div id="home">
+                    <div id="home_search">
+                        <h1 id="home_title">Tomato Hot Pot</h1>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for category">
+                            <div class="input-group-append">
+                                <button class="btn btn-dark" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div id="menu">
-                <div id="menu_btn_container">
+                <div id="menu_btn_container" v-if="user_id">
                     <button id="menu_btn" type="button" class="btn btn-dark dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-bars" aria-hidden="true"></i>
                       </button>
