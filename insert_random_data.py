@@ -143,7 +143,7 @@ cursor=conn.cursor()
 #user_info
 #user_security
 for i in range(USER_CNT):
-    name=random_name_pool.pick_name()
+    name=random_name_pool.generate_name()
 
     if not name:
         break
