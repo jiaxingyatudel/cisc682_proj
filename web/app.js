@@ -13,27 +13,52 @@ const routes={
     "#like":"LIKE"
 };
 
+Vue.component("user_info_input_group",{
+    template:"#user_info_input_group",
+    props:["title","old_value","value"],
+    data:function(){
+        return{
+            toggle:false
+        }
+    },
+    methods:{
+        click_toggle:function(){
+            this.value=this.old_value;
+            this.toggle=!(this.toggle);
+        }
+    }
+})
+
+Vue.component("password_input_group",{
+    template:"#password_input_group",
+    props:["title","value"],
+    data:function(){
+        return{
+            toggle:false
+        }
+    },
+    methods:{
+        click_toggle:function(){
+            this.toggle=!(this.toggle);
+        }
+    }
+});
+
 let user_data={
     user_id:false,
     user_name:false,
     user_email:false,
     user_login_register_toogle:false,
-    register_user_passsword_input_toggle:false,
     register_user_name:"",
     register_user_email:"",
     register_user_password:"",
     login_user_email:"",
     login_user_password:"",
-    login_user_passsword_input_toggle:false,
     user_info_input_user_name:"",
     user_info_input_user_email:"",
-    user_info_user_name_input_toggle:false,
-    user_info_user_email_input_toggle:false,
     change_password_toggle:false,
     change_password_old_password:"",
-    change_password_new_password:"",
-    change_password_old_passsword_input_toggle:false,
-    change_password_new_passsword_input_toggle:false
+    change_password_new_password:""
 }
 
 let router=new Vue({
@@ -129,8 +154,6 @@ let user=new Vue({
                     this.register_user_password="";
                     this.login_user_email="";
                     this.login_user_password="";
-                    this.register_user_passsword_input_toggle=false;
-                    this.login_user_passsword_input_toggle=false;
                     $("#user_modal").modal("hide");
                 }
                 if(resp.err==1){
@@ -157,8 +180,6 @@ let user=new Vue({
                     this.register_user_password="";
                     this.login_user_email="";
                     this.login_user_password="";
-                    this.register_user_passsword_input_toggle=false;
-                    this.login_user_passsword_input_toggle=false;
                     $("#user_modal").modal("hide");
                 }
                 if(resp.err==1){
@@ -182,8 +203,6 @@ let user=new Vue({
                     this.register_user_password="";
                     this.login_user_email="";
                     this.login_user_password="";
-                    this.register_user_passsword_input_toggle=false;
-                    this.login_user_passsword_input_toggle=false;
                     window.location.reload();
                 }
             }
@@ -207,28 +226,12 @@ let user=new Vue({
                     this.register_user_password="";
                     this.login_user_email="";
                     this.login_user_password="";
-                    this.register_user_passsword_input_toggle=false;
-                    this.login_user_passsword_input_toggle=false;
                     window.location.reload();
                 }
             }
         },
         click_user_login_register_toogle:function(b){
             this.user_login_register_toogle=b;
-        },
-        click_register_user_passsword_input_toggle:function(){
-            this.register_user_passsword_input_toggle=!(this.register_user_passsword_input_toggle);
-        },
-        click_login_user_passsword_input_toggle:function(){
-            this.login_user_passsword_input_toggle=!(this.login_user_passsword_input_toggle);
-        },
-        click_user_info_user_name_input_toggle:function(){
-            this.user_info_user_name_input_toggle=!(this.user_info_user_name_input_toggle);
-            this.user_info_input_user_name=this.user_name;
-        },
-        click_user_info_user_email_input_toggle:function(){
-            this.user_info_user_email_input_toggle=!(this.user_info_user_email_input_toggle);
-            this.user_info_input_user_email=this.user_email;
         },
         click_user_info_user_name_confirm:async function(){
             let b=confirm("Are you sure to change your name to "+this.user_info_input_user_name+"?");
@@ -247,8 +250,6 @@ let user=new Vue({
                 const resp=await response.json();
                 if(!resp.err){
                     this.user_name=resp.user_name;
-                    this.user_info_user_name_input_toggle=false;
-                    this.user_info_input_user_name=this.user_name;
                 }
                 if(resp.err==1){
                     alert("System error");
@@ -272,8 +273,6 @@ let user=new Vue({
                 const resp=await response.json();
                 if(!resp.err){
                     this.user_email=resp.user_email;
-                    this.user_info_user_email_input_toggle=false;
-                    this.user_info_input_user_email=this.user_email;
                 }
                 if(resp.err==1){
                     alert("System error");
@@ -285,16 +284,8 @@ let user=new Vue({
         },
         click_change_password_toggle:function(){
             this.change_password_toggle=!(this.change_password_toggle);
-            this.change_password_old_passsword_input_toggle=false;
-            this.change_password_new_passsword_input_toggle=false;
             this.change_password_old_password="";
             this.change_password_new_password="";
-        },
-        click_change_password_old_passsword_input_toggle:function(){
-            this.change_password_old_passsword_input_toggle=!(this.change_password_old_passsword_input_toggle);
-        },
-        click_change_password_new_passsword_input_toggle:function(){
-            this.change_password_new_passsword_input_toggle=!(this.change_password_new_passsword_input_toggle);
         },
         click_change_password_confirm:async function(){
             let b=confirm("Are you sure to change your password?");
@@ -316,8 +307,6 @@ let user=new Vue({
                 if(!resp.err){
                     alert("Password changed")
                     this.change_password_toggle=false;
-                    this.change_password_old_passsword_input_toggle=false;
-                    this.change_password_new_passsword_input_toggle=false;
                     this.change_password_old_password="";
                     this.change_password_new_password="";
                 }
