@@ -74,12 +74,14 @@ body{
 
 .user_register_input_group,
 .user_login_input_group,
-.user_info_input_group{
+.user_info_input_group,
+.change_password_input_group{
     margin-bottom: 10px;
 }
 
 .user_register_input_group_prepend>span,
 .user_login_input_group_prepend>span,
-.user_info_input_group_prepend>span{
-    width: 120px;
+.user_info_input_group_prepend>span,
+.change_password_input_group_prepend>span{
+    width: 140px;
 }

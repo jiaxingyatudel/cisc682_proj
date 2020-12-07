@@ -165,6 +165,32 @@ def user_change_user_email():
     )
     return resp
 
+@app.route("/user_change_password",methods=["POST"])
+def user_change_password():
+    req=request.get_json(force=True)
+
+    user_id=req["user_id"]
+    user_email=req["user_email"]
+    user_old_password=req["user_old_password"]
+    user_new_password=req["user_new_password"]
+
+    user_cookie_value=request.cookies.get("user_cookie_value")
+    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
+    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=user_id)):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    user_security_check=database.check_user_security(user_email,user_old_password)
+    if((len(user_security_check)<1) or (user_security_check[0]["user_id"]!=user_id)):
+        #old password not match
+        resp=jsonify(err=2)
+        return resp
+
+    database.update_user_security_user_password_by_user_id(user_id,user_new_password)
+    resp=jsonify(err=0)
+    return resp
+
 @app.route("/user_logout",methods=["POST"])
 def user_logout():
     user_cookie_value=request.cookies.get("user_cookie_value")

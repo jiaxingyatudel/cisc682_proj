@@ -167,8 +167,38 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-outline-secondary" v-on:click="click_user_change_password_toggle()">Change password</button>
+                                    <div v-if="!change_password_toggle" class="btn-group">
+                                        <button type="button" class="btn btn-outline-secondary" v-on:click="click_change_password_toggle()">Change password</button>
+                                    </div>
+                                    <div v-if="change_password_toggle">
+                                        <div class="input-group change_password_input_group">
+                                            <div class="input-group-prepend change_password_input_group_prepend">
+                                                <span class="input-group-text">Old password</span>
+                                            </div>
+                                            <input v-bind:type="(change_password_old_passsword_input_toggle)?('text'):('password')" class="form-control" v-model="change_password_old_password">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button" v-on:click="click_change_password_old_passsword_input_toggle()">
+                                                    <span v-if="change_password_old_passsword_input_toggle"><i class="fa fa-eye" aria-hidden="true"></i></span>
+                                                    <span v-if="!change_password_old_passsword_input_toggle"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="input-group change_password_input_group">
+                                            <div class="input-group-prepend change_password_input_group_prepend">
+                                                <span class="input-group-text">New password</span>
+                                            </div>
+                                            <input v-bind:type="(change_password_new_passsword_input_toggle)?('text'):('password')" class="form-control" v-model="change_password_new_password">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary" type="button" v-on:click="click_change_password_new_passsword_input_toggle()">
+                                                    <span v-if="change_password_new_passsword_input_toggle"><i class="fa fa-eye" aria-hidden="true"></i></span>
+                                                    <span v-if="!change_password_new_passsword_input_toggle"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-outline-secondary" v-on:click="click_change_password_toggle()">Cancel</button>
+                                            <button type="button" class="btn btn-dark" v-on:click="click_change_password_confirm()">Confirm</button>
+                                        </div>
                                     </div>
                                     <hr>
                                     <div class="btn-group">

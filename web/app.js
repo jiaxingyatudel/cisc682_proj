@@ -28,7 +28,12 @@ let user_data={
     user_info_input_user_name:"",
     user_info_input_user_email:"",
     user_info_user_name_input_toggle:false,
-    user_info_user_email_input_toggle:false
+    user_info_user_email_input_toggle:false,
+    change_password_toggle:false,
+    change_password_old_password:"",
+    change_password_new_password:"",
+    change_password_old_passsword_input_toggle:false,
+    change_password_new_passsword_input_toggle:false
 }
 
 let router=new Vue({
@@ -124,6 +129,8 @@ let user=new Vue({
                     this.register_user_password="";
                     this.login_user_email="";
                     this.login_user_password="";
+                    this.register_user_passsword_input_toggle=false;
+                    this.login_user_passsword_input_toggle=false;
                     $("#user_modal").modal("hide");
                 }
                 if(resp.err==1){
@@ -150,6 +157,8 @@ let user=new Vue({
                     this.register_user_password="";
                     this.login_user_email="";
                     this.login_user_password="";
+                    this.register_user_passsword_input_toggle=false;
+                    this.login_user_passsword_input_toggle=false;
                     $("#user_modal").modal("hide");
                 }
                 if(resp.err==1){
@@ -173,6 +182,8 @@ let user=new Vue({
                     this.register_user_password="";
                     this.login_user_email="";
                     this.login_user_password="";
+                    this.register_user_passsword_input_toggle=false;
+                    this.login_user_passsword_input_toggle=false;
                     window.location.reload();
                 }
             }
@@ -196,6 +207,8 @@ let user=new Vue({
                     this.register_user_password="";
                     this.login_user_email="";
                     this.login_user_password="";
+                    this.register_user_passsword_input_toggle=false;
+                    this.login_user_passsword_input_toggle=false;
                     window.location.reload();
                 }
             }
@@ -218,58 +231,102 @@ let user=new Vue({
             this.user_info_input_user_email=this.user_email;
         },
         click_user_info_user_name_confirm:async function(){
-            let b=confirm("Are you sure to change your name to "+this.user_info_input_user_name);
+            let b=confirm("Are you sure to change your name to "+this.user_info_input_user_name+"?");
             if(!b){
                 return;
-            }else{
-                const response=await fetch("/user_change_user_name",{
-                    method:"POST",
-                    credentials:"include",
-                    body:JSON.stringify({
-                        user_id:this.user_id,
-                        user_name:this.user_info_input_user_name
-                    })
-                });
-                if(response.ok){
-                    const resp=await response.json();
-                    if(!resp.err){
-                        this.user_name=resp.user_name;
-                    }
-                    if(resp.err==1){
-                        alert("System error");
-                    }
+            }
+            const response=await fetch("/user_change_user_name",{
+                method:"POST",
+                credentials:"include",
+                body:JSON.stringify({
+                    user_id:this.user_id,
+                    user_name:this.user_info_input_user_name
+                })
+            });
+            if(response.ok){
+                const resp=await response.json();
+                if(!resp.err){
+                    this.user_name=resp.user_name;
+                    this.user_info_user_name_input_toggle=false;
+                    this.user_info_input_user_name=this.user_name;
                 }
-                this.user_info_user_name_input_toggle=false;
-                this.user_info_input_user_name=this.user_name;
+                if(resp.err==1){
+                    alert("System error");
+                }
             }
         },
         click_user_info_user_email_confirm:async function(){
-            let b=confirm("Are you sure to change your email to "+this.user_info_input_user_email);
+            let b=confirm("Are you sure to change your email to "+this.user_info_input_user_email+"?");
             if(!b){
                 return;
-            }else{
-                const response=await fetch("/user_change_user_email",{
-                    method:"POST",
-                    credentials:"include",
-                    body:JSON.stringify({
-                        user_id:this.user_id,
-                        user_email:this.user_info_input_user_email
-                    })
-                });
-                if(response.ok){
-                    const resp=await response.json();
-                    if(!resp.err){
-                        this.user_email=resp.user_email;
-                    }
-                    if(resp.err==1){
-                        alert("System error");
-                    }
-                    if(resp.err==2){
-                        alert("Email already registered");
-                    }
+            }
+            const response=await fetch("/user_change_user_email",{
+                method:"POST",
+                credentials:"include",
+                body:JSON.stringify({
+                    user_id:this.user_id,
+                    user_email:this.user_info_input_user_email
+                })
+            });
+            if(response.ok){
+                const resp=await response.json();
+                if(!resp.err){
+                    this.user_email=resp.user_email;
+                    this.user_info_user_email_input_toggle=false;
+                    this.user_info_input_user_email=this.user_email;
                 }
-                this.user_info_user_email_input_toggle=false;
-                this.user_info_input_user_email=this.user_email;
+                if(resp.err==1){
+                    alert("System error");
+                }
+                if(resp.err==2){
+                    alert("Email already registered");
+                }
+            }
+        },
+        click_change_password_toggle:function(){
+            this.change_password_toggle=!(this.change_password_toggle);
+            this.change_password_old_passsword_input_toggle=false;
+            this.change_password_new_passsword_input_toggle=false;
+            this.change_password_old_password="";
+            this.change_password_new_password="";
+        },
+        click_change_password_old_passsword_input_toggle:function(){
+            this.change_password_old_passsword_input_toggle=!(this.change_password_old_passsword_input_toggle);
+        },
+        click_change_password_new_passsword_input_toggle:function(){
+            this.change_password_new_passsword_input_toggle=!(this.change_password_new_passsword_input_toggle);
+        },
+        click_change_password_confirm:async function(){
+            let b=confirm("Are you sure to change your password?");
+            if(!b){
+                return;
+            }
+            const response=await fetch("/user_change_password",{
+                method:"POST",
+                credentials:"include",
+                body:JSON.stringify({
+                    user_id:this.user_id,
+                    user_email:this.user_email,
+                    user_old_password:this.change_password_old_password,
+                    user_new_password:this.change_password_new_password
+                })
+            });
+            if(response.ok){
+                const resp=await response.json();
+                if(!resp.err){
+                    alert("Password changed")
+                    this.change_password_toggle=false;
+                    this.change_password_old_passsword_input_toggle=false;
+                    this.change_password_new_passsword_input_toggle=false;
+                    this.change_password_old_password="";
+                    this.change_password_new_password="";
+                }
+                if(resp.err==1){
+                    alert("System error");
+                }
+                if(resp.err==2){
+                    alert("Old password not match");
+                }
             }
         }
     }
