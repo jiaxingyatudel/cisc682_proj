@@ -26,6 +26,14 @@ sql_insert_user_security="""
 insert into user_security (user_id,user_email,user_password) values ('{user_id}','{user_email}','{user_password}');
 """
 
+sql_update_user_security_user_email_by_user_id="""
+update user_security set user_email='{user_email}' where user_id='{user_id}';
+"""
+
+sql_update_user_security_user_password_by_user_id="""
+update user_security set user_password='{user_password}' where user_id='{user_id}';
+"""
+
 sql_select_user_security_by_user_email_user_password="""
 select * from user_security where user_email='{user_email}' and user_password='{user_password}';
 """
@@ -76,10 +84,6 @@ class DatabaseQuery:
 
     def update_user_info_user_name_by_user_id(self,user_id,user_name):
         self.cursor.execute(sql_update_user_info_user_name_by_user_id.format(user_id=user_id,user_name=user_name))
-        return {
-            "user_id":user_id,
-            "user_name":user_name
-        }
 
     def select_user_info_by_user_id(self,user_id):
         self.cursor.execute(sql_select_user_info_by_user_id.format(user_id=user_id))
@@ -93,6 +97,13 @@ class DatabaseQuery:
             "user_email":user_email,
             "user_password":user_password
         }
+
+    def update_user_security_user_email_by_user_id(self,user_id,user_email):
+        self.cursor.execute(sql_update_user_security_user_email_by_user_id.format(user_id=user_id,user_email=user_email))
+
+    def update_user_security_user_password_by_user_id(self,user_id,user_password):
+        user_password_hash=hashlib.sha256(user_password.encode("utf-8")).hexdigest()
+        self.cursor.execute(sql_update_user_security_user_password_by_user_id.format(user_id=user_id,user_password=user_password_hash))
 
     def check_user_security(self,user_email,user_password):
         user_password_hash=hashlib.sha256(user_password.encode("utf-8")).hexdigest()

@@ -122,10 +122,59 @@
                                     </div>
                                 </div>
                                 <div v-if="user_id">
-                                    <div>{{user_id}}</div>
-                                    <div>{{user_name}}</div>
-                                    <div>{{user_email}}</div>
-                                    <button type="button" class="btn btn-danger" v-on:click="click_user_logout()">Logout</button>
+                                    <div class="input-group user_info_input_group">
+                                        <div class="input-group-prepend user_info_input_group_prepend">
+                                            <span class="input-group-text">Name</span>
+                                        </div>
+                                        <input v-if="!user_info_user_name_input_toggle" type="text" class="form-control" v-model="user_name" readonly>
+                                        <input v-if="user_info_user_name_input_toggle" type="text" class="form-control" v-model="user_info_input_user_name">
+                                        <div v-if="!user_info_user_name_input_toggle" class="input-group-append user_info_input_group_append">
+                                            <button class="btn btn-outline-secondary" type="button" v-on:click="click_user_info_user_name_input_toggle()">
+                                                <span>Rename</span>
+                                            </button>
+                                        </div>
+                                        <div v-if="user_info_user_name_input_toggle" class="input-group-append user_info_input_group_append">
+                                            <button class="btn btn-outline-secondary" type="button" v-on:click="click_user_info_user_name_input_toggle()">
+                                                <span>Cancel</span>
+                                            </button>
+                                        </div>
+                                        <div v-if="user_info_user_name_input_toggle" class="input-group-append user_info_input_group_append">
+                                            <button class="btn btn-dark" type="button" v-on:click="click_user_info_user_name_confirm()">
+                                                <span>Confirm</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="input-group user_info_input_group">
+                                        <div class="input-group-prepend user_info_input_group_prepend">
+                                            <span class="input-group-text">E-mail</span>
+                                        </div>
+                                        <input v-if="!user_info_user_email_input_toggle" type="text" class="form-control" v-model="user_email" readonly>
+                                        <input v-if="user_info_user_email_input_toggle" type="text" class="form-control" v-model="user_info_input_user_email">
+                                        <div v-if="!user_info_user_email_input_toggle" class="input-group-append user_info_input_group_append">
+                                            <button class="btn btn-outline-secondary" type="button" v-on:click="click_user_info_user_email_input_toggle()">
+                                                <span>Change E-mail</span>
+                                            </button>
+                                        </div>
+                                        <div v-if="user_info_user_email_input_toggle" class="input-group-append user_info_input_group_append">
+                                            <button class="btn btn-outline-secondary" type="button" v-on:click="click_user_info_user_email_input_toggle()">
+                                                <span>Cancel</span>
+                                            </button>
+                                        </div>
+                                        <div v-if="user_info_user_email_input_toggle" class="input-group-append user_info_input_group_append">
+                                            <button class="btn btn-dark" type="button" v-on:click="click_user_info_user_email_confirm()">
+                                                <span>Confirm</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-outline-secondary" v-on:click="click_user_change_password_toggle()">Change password</button>
+                                    </div>
+                                    <hr>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-outline-danger" v-on:click="click_user_logout()">Logout</button>
+                                        <button type="button" class="btn btn-outline-danger" v-on:click="click_user_logout_all()">Logout from all clients</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

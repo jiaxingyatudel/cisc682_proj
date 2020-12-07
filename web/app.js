@@ -25,6 +25,10 @@ let user_data={
     login_user_email:"",
     login_user_password:"",
     login_user_passsword_input_toggle:false,
+    user_info_input_user_name:"",
+    user_info_input_user_email:"",
+    user_info_user_name_input_toggle:false,
+    user_info_user_email_input_toggle:false
 }
 
 let router=new Vue({
@@ -61,7 +65,7 @@ let compose=new Vue({
 let user=new Vue({
     el:"#user",
     data:user_data,
-    mounted: async function(){
+    mounted:async function(){
         const response=await fetch("/check_user_cookie",{
             method:"POST",
             credentials:"include"
@@ -104,9 +108,9 @@ let user=new Vue({
             const response=await fetch("/user_register",{
                 method:"POST",
                 body:JSON.stringify({
-                    user_name: this.register_user_name,
-                    user_email: this.register_user_email,
-                    user_password: this.register_user_password
+                    user_name:this.register_user_name,
+                    user_email:this.register_user_email,
+                    user_password:this.register_user_password
                 })
             });
             if(response.ok){
@@ -120,6 +124,7 @@ let user=new Vue({
                     this.register_user_password="";
                     this.login_user_email="";
                     this.login_user_password="";
+                    $("#user_modal").modal("hide");
                 }
                 if(resp.err==1){
                     alert("Email already registered");
@@ -130,8 +135,8 @@ let user=new Vue({
             const response=await fetch("/user_login",{
                 method:"POST",
                 body:JSON.stringify({
-                    user_email: this.login_user_email,
-                    user_password: this.login_user_password
+                    user_email:this.login_user_email,
+                    user_password:this.login_user_password
                 })
             });
             if(response.ok){
@@ -145,6 +150,7 @@ let user=new Vue({
                     this.register_user_password="";
                     this.login_user_email="";
                     this.login_user_password="";
+                    $("#user_modal").modal("hide");
                 }
                 if(resp.err==1){
                     alert("Email and password not match");
@@ -157,16 +163,45 @@ let user=new Vue({
                 credentials:"include"
             });
             if(response.ok){
-                this.user_id=false;
-                this.user_name=false;
-                this.user_email=false;
-                this.register_user_name="";
-                this.register_user_email="";
-                this.register_user_password="";
-                this.login_user_email="";
-                this.login_user_password="";
-                window.location.reload();
+                const resp=await response.json();
+                if(!resp.err){
+                    this.user_id=false;
+                    this.user_name=false;
+                    this.user_email=false;
+                    this.register_user_name="";
+                    this.register_user_email="";
+                    this.register_user_password="";
+                    this.login_user_email="";
+                    this.login_user_password="";
+                    window.location.reload();
+                }
             }
+        },
+        click_user_logout_all:async function(){
+            const response=await fetch("/user_logout_all",{
+                method:"POST",
+                credentials:"include",
+                body:JSON.stringify({
+                    user_id:this.user_id,
+                })
+            });
+            if(response.ok){
+                const resp=await response.json();
+                if(!resp.err){
+                    this.user_id=false;
+                    this.user_name=false;
+                    this.user_email=false;
+                    this.register_user_name="";
+                    this.register_user_email="";
+                    this.register_user_password="";
+                    this.login_user_email="";
+                    this.login_user_password="";
+                    window.location.reload();
+                }
+            }
+        },
+        click_user_login_register_toogle:function(b){
+            this.user_login_register_toogle=b;
         },
         click_register_user_passsword_input_toggle:function(){
             this.register_user_passsword_input_toggle=!(this.register_user_passsword_input_toggle);
@@ -174,8 +209,68 @@ let user=new Vue({
         click_login_user_passsword_input_toggle:function(){
             this.login_user_passsword_input_toggle=!(this.login_user_passsword_input_toggle);
         },
-        click_user_login_register_toogle:function(b){
-            this.user_login_register_toogle=b;
+        click_user_info_user_name_input_toggle:function(){
+            this.user_info_user_name_input_toggle=!(this.user_info_user_name_input_toggle);
+            this.user_info_input_user_name=this.user_name;
+        },
+        click_user_info_user_email_input_toggle:function(){
+            this.user_info_user_email_input_toggle=!(this.user_info_user_email_input_toggle);
+            this.user_info_input_user_email=this.user_email;
+        },
+        click_user_info_user_name_confirm:async function(){
+            let b=confirm("Are you sure to change your name to "+this.user_info_input_user_name);
+            if(!b){
+                return;
+            }else{
+                const response=await fetch("/user_change_user_name",{
+                    method:"POST",
+                    credentials:"include",
+                    body:JSON.stringify({
+                        user_id:this.user_id,
+                        user_name:this.user_info_input_user_name
+                    })
+                });
+                if(response.ok){
+                    const resp=await response.json();
+                    if(!resp.err){
+                        this.user_name=resp.user_name;
+                    }
+                    if(resp.err==1){
+                        alert("System error");
+                    }
+                }
+                this.user_info_user_name_input_toggle=false;
+                this.user_info_input_user_name=this.user_name;
+            }
+        },
+        click_user_info_user_email_confirm:async function(){
+            let b=confirm("Are you sure to change your email to "+this.user_info_input_user_email);
+            if(!b){
+                return;
+            }else{
+                const response=await fetch("/user_change_user_email",{
+                    method:"POST",
+                    credentials:"include",
+                    body:JSON.stringify({
+                        user_id:this.user_id,
+                        user_email:this.user_info_input_user_email
+                    })
+                });
+                if(response.ok){
+                    const resp=await response.json();
+                    if(!resp.err){
+                        this.user_email=resp.user_email;
+                    }
+                    if(resp.err==1){
+                        alert("System error");
+                    }
+                    if(resp.err==2){
+                        alert("Email already registered");
+                    }
+                }
+                this.user_info_user_email_input_toggle=false;
+                this.user_info_input_user_email=this.user_email;
+            }
         }
     }
 });

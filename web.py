@@ -115,10 +115,78 @@ def check_user_cookie():
         resp=jsonify(err=1)
         return resp
 
+@app.route("/user_change_user_name",methods=["POST"])
+def user_change_user_name():
+    req=request.get_json(force=True)
+
+    user_cookie_value=request.cookies.get("user_cookie_value")
+    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
+    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=req["user_id"])):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    user_id=req["user_id"]
+    user_name=req["user_name"]
+
+    database.update_user_info_user_name_by_user_id(user_id,user_name)
+
+    resp=jsonify(
+        err=0,
+        user_name=user_name
+    )
+    return resp
+
+@app.route("/user_change_user_email",methods=["POST"])
+def user_change_user_email():
+    req=request.get_json(force=True)
+
+    user_id=req["user_id"]
+    user_email=req["user_email"]
+
+    user_cookie_value=request.cookies.get("user_cookie_value")
+    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
+    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=user_id)):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    user_email_check=database.check_user_security_by_user_email(user_email)
+    if(len(user_email_check)>0):
+        #email already registered
+        resp=jsonify(err=2)
+        return resp
+
+    database.update_user_security_user_email_by_user_id(user_id,user_email)
+
+    resp=jsonify(
+        err=0,
+        user_email=user_email
+    )
+    return resp
+
 @app.route("/user_logout",methods=["POST"])
 def user_logout():
     user_cookie_value=request.cookies.get("user_cookie_value")
     database.delete_user_cookie_by_user_cookie_value(user_cookie_value)
+    resp=jsonify(err=0)
+    resp.delete_cookie("user_cookie_value")
+    return resp
+
+@app.route("/user_logout_all",methods=["POST"])
+def user_logout_all():
+    req=request.get_json(force=True)
+
+    user_id=req["user_id"]
+
+    user_cookie_value=request.cookies.get("user_cookie_value")
+    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
+    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=user_id)):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    database.delete_user_cookie_by_user_id(user_id)
     resp=jsonify(err=0)
     resp.delete_cookie("user_cookie_value")
     return resp
