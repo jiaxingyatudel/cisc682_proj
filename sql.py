@@ -170,6 +170,12 @@ sql_select_user_follow_by_follow_id="""
 select * from user_follow where follow_id='{follow_id}';
 """
 
+sql_select_user_follow_with_user_info_by_user_id="""
+select * from user_info join (
+    select follow_id from user_follow where user_id='{user_id}'
+) as user_follow_query on user_follow_query.follow_id=user_info.user_id;
+"""
+
 #post_info
 sql_insert_post_info="""
 insert into post_info (post_id,post_title,post_text,post_time,user_id) values ('{post_id}','{post_title}','{post_text}','{post_time}','{user_id}');

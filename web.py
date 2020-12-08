@@ -38,14 +38,12 @@ def user_register():
         return resp
     else:
         user_info=database.insert_user_info(user_name)
-        user_security=database.insert_user_security(user_info["user_id"],user_email,user_password)
+        database.insert_user_security(user_info["user_id"],user_email,user_password)
         cookie=database.insert_user_cookie(user_info["user_id"])
 
         resp=jsonify(
             err=False,
-            user_id=user_info["user_id"],
-            user_name=user_info["user_name"],
-            user_email=user_security["user_email"]
+            user_id=user_info["user_id"]
         )
         resp.set_cookie("user_cookie_value",cookie["user_cookie_value"])
         return resp
@@ -68,16 +66,11 @@ def user_login():
         user_security=query[0]
 
         user_id=user_security["user_id"]
-        user_email=user_security["user_email"]
-
-        user_info=database.select_user_info_by_user_id(user_id)[0]
-        cookie=database.insert_user_cookie(user_info["user_id"])
+        cookie=database.insert_user_cookie(user_id)
 
         resp=jsonify(
             err=0,
-            user_id=user_info["user_id"],
-            user_name=user_info["user_name"],
-            user_email=user_security["user_email"]
+            user_id=user_id
         )
         resp.set_cookie("user_cookie_value",cookie["user_cookie_value"])
         return resp
@@ -101,19 +94,38 @@ def check_user_cookie():
         else:
             database.update_user_cookie_by_user_cookie_value(user_cookie_value)
 
-            user_info=database.select_user_info_by_user_id(user_id)[0]
-            user_security=database.check_user_security_by_user_id(user_id)[0]
-
             resp=jsonify(
                 err=0,
-                user_id=user_info["user_id"],
-                user_name=user_info["user_name"],
-                user_email=user_security["user_email"]
+                user_id=user_id
             )
             return resp
     else:
         resp=jsonify(err=1)
         return resp
+
+@app.route("/get_user_info_all",methods=["GET"])
+def get_user_info_all():
+    args=request.args
+
+    user_id=args["user_id"]
+
+    user_cookie_value=request.cookies.get("user_cookie_value")
+    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
+    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=user_id)):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    user_info=database.select_user_info_by_user_id(user_id)[0]
+    user_security=database.check_user_security_by_user_id(user_id)[0]
+
+    resp=jsonify(
+        err=0,
+        user_id=user_info["user_id"],
+        user_name=user_info["user_name"],
+        user_email=user_security["user_email"]
+    )
+    return resp
 
 @app.route("/user_change_user_name",methods=["POST"])
 def user_change_user_name():
@@ -215,6 +227,27 @@ def user_logout_all():
     database.delete_user_cookie_by_user_id(user_id)
     resp=jsonify(err=0)
     resp.delete_cookie("user_cookie_value")
+    return resp
+
+@app.route("/get_following_users",methods=["GET"])
+def get_following_users():
+    args=request.args
+
+    user_id=args["user_id"]
+
+    user_cookie_value=request.cookies.get("user_cookie_value")
+    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
+    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=user_id)):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    following_users_info=database.select_user_follow_with_user_info_by_user_id(user_id)
+
+    resp=jsonify(
+        err=0,
+        following_users_info=following_users_info
+    )
     return resp
 
 if __name__ == '__main__':
