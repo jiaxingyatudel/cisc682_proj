@@ -6,103 +6,14 @@
 import pymysql
 from pymysql.constants import CLIENT
 
+import sql
+
 database_user=input("[database user name]")
 database_password=input("[database password]")
 conn=pymysql.connect(host="localhost",user=database_user,password=database_password,autocommit=True,client_flag=CLIENT.MULTI_STATEMENTS)
 cursor=conn.cursor()
 
-sql="""
-drop database if exists cisc637;
-create database cisc637;
-use cisc637;
-
-create table user_info(
-    user_id varchar(255),
-    user_name varchar(255),
-    primary key (user_id)
-);
-
-create table user_security(
-    user_id varchar(255),
-    user_email varchar(255),
-    user_password varchar(255),
-    primary key (user_id),
-    foreign key (user_id) references user_info(user_id) on delete cascade,
-    unique (user_email)
-);
-
-create table user_cookie(
-    user_id varchar(255),
-    user_cookie_value varchar(255),
-    user_cookie_time_stamp int,
-    primary key (user_cookie_value),
-    foreign key (user_id) references user_info(user_id) on delete cascade
-);
-
-create table user_follow(
-    user_id varchar(255),
-    follow_id varchar(255),
-    foreign key (user_id) references user_info(user_id) on delete cascade,
-    foreign key (follow_id) references user_info(user_id) on delete cascade
-);
-
-create table post_info(
-    post_id varchar(255),
-    post_title text,
-    post_text text,
-    post_time datetime,
-    user_id varchar(255),
-    primary key (post_id),
-    foreign key (user_id) references user_info(user_id) on delete cascade
-);
-
-create table post_ingredient(
-    post_id varchar(255),
-    ingredient text,
-    ingredient_sequence int,
-    foreign key (post_id) references post_info(post_id) on delete cascade
-);
-
-create table user_like_post(
-    user_id varchar(255),
-    post_id varchar(255),
-    foreign key (user_id) references user_info(user_id) on delete cascade,
-    foreign key (post_id) references post_info(post_id) on delete cascade
-);
-
-create table comment_info(
-    comment_id varchar(255),
-    comment_text text,
-    comment_time datetime,
-    post_id varchar(255),
-    user_id varchar(255),
-    primary key (comment_id),
-    foreign key (user_id) references user_info(user_id) on delete cascade,
-    foreign key (post_id) references post_info(post_id) on delete cascade
-);
-
-create table tag_info(
-    tag_id varchar(255),
-    tag_name varchar(255),
-    primary key (tag_id)
-);
-
-create table post_tag(
-    post_id varchar(255),
-    tag_id varchar(255),
-    foreign key (post_id) references post_info(post_id) on delete cascade,
-    foreign key (tag_id) references tag_info(tag_id) on delete cascade
-);
-
-create table user_follow_tag(
-    user_id varchar(255),
-    tag_id varchar(255),
-    foreign key (user_id) references user_info(user_id) on delete cascade,
-    foreign key (tag_id) references tag_info(tag_id) on delete cascade
-)
-"""
-
-cursor.execute(sql)
+cursor.execute(sql.sql_create_tables)
 
 cursor.close()
 conn.close()

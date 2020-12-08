@@ -13,6 +13,8 @@ import datetime
 from random_name_pool import RandomNamePool
 from lorem_ipsum import LoremIpsum
 
+import sql
+
 USER_CNT=100
 FOLLOW_USER_CNT_MIN=0
 FOLLOW_USER_CNT_MAX=4
@@ -29,46 +31,6 @@ POST_TAG_CNT_MIN=1
 POST_TAG_CNT_MAX=4
 USER_FOLLOW_TAG_CNT_MIN=2
 USER_FOLLOW_TAG_CNT_MAX=4
-
-sql_insert_user_info="""
-insert into user_info (user_id,user_name) values ('{user_id}','{user_name}');
-"""
-
-sql_insert_user_security="""
-insert into user_security (user_id,user_email,user_password) values ('{user_id}','{user_email}','{user_password}');
-"""
-
-sql_insert_user_follow="""
-insert into user_follow (user_id,follow_id) values ('{user_id}','{follow_id}');
-"""
-
-sql_insert_post_info="""
-insert into post_info (post_id,post_title,post_text,post_time,user_id) values ('{post_id}','{post_title}','{post_text}','{post_time}','{user_id}');
-"""
-
-sql_insert_post_ingredient="""
-insert into post_ingredient (post_id,ingredient,ingredient_sequence) values ('{post_id}','{ingredient}','{ingredient_sequence}');
-"""
-
-sql_insert_user_like_post="""
-insert into user_like_post (user_id,post_id) values ('{user_id}','{post_id}');
-"""
-
-sql_insert_comment_info="""
-insert into comment_info (comment_id,comment_text,comment_time,user_id,post_id) values ('{comment_id}','{comment_text}','{comment_time}','{user_id}','{post_id}');
-"""
-
-sql_insert_tag_info="""
-insert into tag_info (tag_id,tag_name) values ('{tag_id}','{tag_name}');
-"""
-
-sql_insert_post_tag="""
-insert into post_tag (post_id,tag_id) values ('{post_id}','{tag_id}');
-"""
-
-sql_insert_user_follow_tag="""
-insert into user_follow_tag (user_id,tag_id) values ('{user_id}','{tag_id}');
-"""
 
 class UserPool:
     def __init__(self):
@@ -157,8 +119,8 @@ for i in range(USER_CNT):
 
 for i in range(len(user_pool.users)):
     user=user_pool.users[i]
-    cursor.execute(sql_insert_user_info.format(user_id=user["user_id"],user_name=user["user_name"]))
-    cursor.execute(sql_insert_user_security.format(user_id=user["user_id"],user_email=user["user_email"],user_password=user["user_password"]))
+    cursor.execute(sql.sql_insert_user_info.format(user_id=user["user_id"],user_name=user["user_name"]))
+    cursor.execute(sql.sql_insert_user_security.format(user_id=user["user_id"],user_email=user["user_email"],user_password=user["user_password"]))
 
 #user_follow
 for i in range(len(user_pool.users)):
@@ -177,7 +139,7 @@ for i in range(len(user_pool.users)):
 
     for j in range(len(follow_user_index_pool)):
         follow_user=user_pool.users[follow_user_index_pool[j]]
-        cursor.execute(sql_insert_user_follow.format(user_id=user["user_id"],follow_id=follow_user["user_id"]))
+        cursor.execute(sql.sql_insert_user_follow.format(user_id=user["user_id"],follow_id=follow_user["user_id"]))
 
 #post_info
 for i in range(len(user_pool.users)):
@@ -196,7 +158,7 @@ for i in range(len(user_pool.users)):
 
 for i in range(len(post_pool.posts)):
     post=post_pool.posts[i]
-    cursor.execute(sql_insert_post_info.format(
+    cursor.execute(sql.sql_insert_post_info.format(
         post_id=post["post_id"],
         post_title=post["post_title"],
         post_text=post["post_text"],
@@ -211,10 +173,10 @@ for i in range(len(post_pool.posts)):
     ingredient_pool=random.sample(lorem_ipsum.lorem_ipsum_words,ingredient_cnt)
     for j in range(len(ingredient_pool)):
         ingredient=ingredient_pool[j]
-        cursor.execute(sql_insert_post_ingredient.format(
+        cursor.execute(sql.sql_insert_post_ingredient.format(
             post_id=post["post_id"],
-            ingredient=ingredient.capitalize(),
-            ingredient_sequence=j
+            ingredient_id=uuid.uuid4().hex,
+            ingredient_text=ingredient.capitalize(),
         ))
 
 #user_like_post
@@ -224,7 +186,7 @@ for i in range(len(user_pool.users)):
     like_psot_sample=random.sample(post_pool.posts,like_post_cnt)
     for j in range(len(like_psot_sample)):
         post=like_psot_sample[j]
-        cursor.execute(sql_insert_user_like_post.format(
+        cursor.execute(sql.sql_insert_user_like_post.format(
             user_id=user["user_id"],
             post_id=post["post_id"]
         ))
@@ -246,7 +208,7 @@ for i in range(len(post_pool.posts)):
 
 for i in range(len(comment_pool.comments)):
     comment=comment_pool.comments[i]
-    cursor.execute(sql_insert_comment_info.format(
+    cursor.execute(sql.sql_insert_comment_info.format(
         comment_id=comment["comment_id"],
         comment_text=comment["comment_text"],
         comment_time=comment["comment_time"],
@@ -262,7 +224,7 @@ for i in range(len(tag_name_pool)):
 
 for i in range(len(tag_pool.tags)):
     tag=tag_pool.tags[i]
-    cursor.execute(sql_insert_tag_info.format(
+    cursor.execute(sql.sql_insert_tag_info.format(
         tag_id=tag["tag_id"],
         tag_name=tag["tag_name"]
     ))
@@ -274,7 +236,7 @@ for i in range(len(post_pool.posts)):
     tag_sample=random.sample(tag_pool.tags,tag_cnt)
     for j in range(len(tag_sample)):
         tag=tag_sample[j]
-        cursor.execute(sql_insert_post_tag.format(
+        cursor.execute(sql.sql_insert_post_tag.format(
             post_id=post["post_id"],
             tag_id=tag["tag_id"]
         ))
@@ -286,7 +248,7 @@ for i in range(len(user_pool.users)):
     tag_sample=random.sample(tag_pool.tags,tag_cnt)
     for j in range(len(tag_sample)):
         tag=tag_sample[j]
-        cursor.execute(sql_insert_user_follow_tag.format(
+        cursor.execute(sql.sql_insert_user_follow_tag.format(
             user_id=user["user_id"],
             tag_id=tag["tag_id"]
         ))

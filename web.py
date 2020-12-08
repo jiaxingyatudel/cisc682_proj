@@ -8,11 +8,11 @@ import pymysql
 
 import time
 
-from database_query import DatabaseQuery
+from database import Database
 
 database_user=input("[database user name]")
 database_password=input("[database password]")
-database=DatabaseQuery(database_user,database_password)
+database=Database(database_user,database_password)
 
 app=Flask(__name__,static_folder="./web/")
 
