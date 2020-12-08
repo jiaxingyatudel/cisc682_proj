@@ -8,7 +8,7 @@ import pymysql
 import random
 import uuid
 import hashlib
-import datetime
+import time
 
 from random_name_pool import RandomNamePool
 from lorem_ipsum import LoremIpsum
@@ -49,12 +49,12 @@ class PostPool:
     def __init__(self):
         self.posts=[]
 
-    def new_post_info(self,post_title,post_text,post_time,user_id):
+    def new_post_info(self,post_title,post_text,post_time_stamp,user_id):
         post={
             "post_id":uuid.uuid4().hex,
             "post_title":post_title,
             "post_text":post_text,
-            "post_time":post_time,
+            "post_time_stamp":post_time_stamp,
             "user_id":user_id
         }
         self.posts.append(post)
@@ -64,11 +64,11 @@ class CommentPool:
     def __init__(self):
         self.comments=[]
 
-    def new_comment_info(self,comment_text,comment_time,post_id,user_id):
+    def new_comment_info(self,comment_text,comment_time_stamp,post_id,user_id):
         comment={
             "comment_id":uuid.uuid4().hex,
             "comment_text":comment_text,
-            "comment_time":comment_time,
+            "comment_time_stamp":comment_time_stamp,
             "post_id":post_id,
             "user_id":user_id,
         }
@@ -148,11 +148,11 @@ for i in range(len(user_pool.users)):
     for j in range(post_cnt):
         post_title=lorem_ipsum.generate_sentence(4,8,6)
         post_text=lorem_ipsum.generate_paragraph(4,8,8,16,4)
-        post_time=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        post_time_stamp=int(time.time())
         post_pool.new_post_info(
             post_title,
             post_text,
-            post_time,
+            post_time_stamp,
             user["user_id"]
         )
 
@@ -162,7 +162,7 @@ for i in range(len(post_pool.posts)):
         post_id=post["post_id"],
         post_title=post["post_title"],
         post_text=post["post_text"],
-        post_time=post["post_time"],
+        post_time_stamp=post["post_time_stamp"],
         user_id=post["user_id"],
     ))
 
@@ -198,10 +198,10 @@ for i in range(len(post_pool.posts)):
     for j in range(comment_cnt):
         user=user_pool.users[random.randint(0,len(user_pool.users)-1)]
         comment_text=lorem_ipsum.generate_paragraph(2,4,8,16,4)
-        comment_time=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        comment_time_stamp=int(time.time())
         comment_pool.new_comment_info(
             comment_text,
-            comment_time,
+            comment_time_stamp,
             post["post_id"],
             user["user_id"]
         )
@@ -211,7 +211,7 @@ for i in range(len(comment_pool.comments)):
     cursor.execute(sql.sql_insert_comment_info.format(
         comment_id=comment["comment_id"],
         comment_text=comment["comment_text"],
-        comment_time=comment["comment_time"],
+        comment_time_stamp=comment["comment_time_stamp"],
         user_id=comment["user_id"],
         post_id=comment["post_id"],
     ))

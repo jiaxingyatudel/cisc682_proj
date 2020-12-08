@@ -7,6 +7,7 @@ from flask import jsonify
 import pymysql
 
 import time
+import datetime
 
 from database import Database
 
@@ -247,6 +248,33 @@ def get_following_users():
     resp=jsonify(
         err=0,
         following_users_info=following_users_info
+    )
+    return resp
+
+@app.route("/get_my_recipes_info",methods=["GET"])
+def get_my_recipes_info():
+    args=request.args
+
+    user_id=args["user_id"]
+
+    user_cookie_value=request.cookies.get("user_cookie_value")
+    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
+    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=user_id)):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    my_recipes_info=database.select_post_info_by_user_id(user_id)
+
+    for i in range(len(my_recipes_info)):
+        post_info=my_recipes_info[i]
+        post_time_stamp=post_info["post_time_stamp"]
+        post_time=datetime.datetime.utcfromtimestamp(post_time_stamp).strftime("%Y-%m-%dT%H:%M:%SZ")
+        post_info["post_time"]=post_time
+
+    resp=jsonify(
+        err=0,
+        my_recipes_info=my_recipes_info
     )
     return resp
 

@@ -38,7 +38,7 @@ create table post_info(
     post_id varchar(255),
     post_title text,
     post_text text,
-    post_time datetime,
+    post_time_stamp int,
     user_id varchar(255),
     primary key (post_id),
     foreign key (user_id) references user_info(user_id) on delete cascade
@@ -61,7 +61,7 @@ create table user_like_post(
 create table comment_info(
     comment_id varchar(255),
     comment_text text,
-    comment_time datetime,
+    comment_time_stamp int,
     post_id varchar(255),
     user_id varchar(255),
     primary key (comment_id),
@@ -178,15 +178,15 @@ select * from user_info join (
 
 #post_info
 sql_insert_post_info="""
-insert into post_info (post_id,post_title,post_text,post_time,user_id) values ('{post_id}','{post_title}','{post_text}','{post_time}','{user_id}');
+insert into post_info (post_id,post_title,post_text,post_time_stamp,user_id) values ('{post_id}','{post_title}','{post_text}','{post_time_stamp}','{user_id}');
 """
 
 sql_delete_post_info_by_post_id="""
 delete from post_info where post_id='{post_id}';
 """
 
-sql_update_post_info_user_name_by_user_id="""
-update post_info set user_name='{user_name}' where post_id='{post_id}';
+sql_update_post_info_by_user_id="""
+update post_info set post_title='{post_title}' post_text='{post_text}' post_time_stamp='{post_time_stamp}' where post_id='{post_id}';
 """
 
 sql_select_post_info_by_post_id="""
@@ -194,7 +194,7 @@ select * from post_info where post_id='{post_id}';
 """
 
 sql_select_post_info_by_user_id="""
-select * from post_info where post_id='{user_id}';
+select * from post_info where user_id='{user_id}';
 """
 
 #post_ingredient
@@ -225,7 +225,7 @@ delete from user_like_post where user_id='{user_id}' and post_id='{post_id}';
 
 #comment_info
 sql_insert_comment_info="""
-insert into comment_info (comment_id,comment_text,comment_time,post_id,user_id) values ('{comment_id}','{comment_text}','{comment_time}','{post_id}','{user_id}');
+insert into comment_info (comment_id,comment_text,comment_time_stamp,post_id,user_id) values ('{comment_id}','{comment_text}','{comment_time_stamp}','{post_id}','{user_id}');
 """
 
 sql_delete_comment_info_by_comment_id="""
@@ -233,7 +233,7 @@ delete from comment_info where comment_id='{comment_id}';
 """
 
 sql_update_comment_info_by_comment_id="""
-update comment_info set comment_text='{comment_text}', comment_time='{comment_time}' where comment_id='{comment_id}';
+update comment_info set comment_text='{comment_text}', comment_time_stamp='{comment_time_stamp}' where comment_id='{comment_id}';
 """
 
 sql_select_comment_info_by_post_id="""

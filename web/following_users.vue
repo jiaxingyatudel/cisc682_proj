@@ -2,19 +2,21 @@
 </style>
 
 <template>
-<div>
-    <top-bar title="Following"></top-bar>
-    <div class="content">
-        <ul class="list-group">
-            <li class="list-group-item" v-for="following_user in following_users_info" v-bind:key="following_user.user_id">
-                <span>{{following_user.user_name}}</span>
-                <button type="button" class="btn btn-outline-danger" style="float:right">
-                    <span><i class="fa fa-user-times" aria-hidden="true"></i></span>
-                </button>
-            </li>
-        </ul>
+    <div>
+        <div class="content_container">
+            <div class="content">
+                <ul class="list-group">
+                    <li class="list-group-item" v-for="following_user in following_users_info" v-bind:key="following_user.user_id">
+                        <span>{{following_user.user_name}}</span>
+                        <button type="button" class="btn btn-outline-danger" style="float:right">
+                            <span><i class="fa fa-user-times" aria-hidden="true"></i></span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <top-bar title="Following"></top-bar>
     </div>
-</div>
 </template>
 
 <script>
@@ -26,7 +28,7 @@ module.exports={
     },
     computed:{
         user_id:function(){
-            return store.state.user_id
+            return store.state.user_id;
         }
     },
     watch:{

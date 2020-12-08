@@ -153,7 +153,7 @@ module.exports={
     },
     computed:{
         user_id:function(){
-            return store.state.user_id
+            return store.state.user_id;
         }
     },
     watch:{
