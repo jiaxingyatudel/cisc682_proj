@@ -267,6 +267,10 @@ sql_delete_tag_info_by_tag_id="""
 delete from tag_info where tag_id='{tag_id}';
 """
 
+sql_select_post_tag_info_of_post_id="""
+select * from tag_info where tag_id in (select tag_id from post_tag where post_id='{post_id}');
+"""
+
 #post_tag
 sql_insert_post_tag="""
 insert into post_tag (post_id,tag_id) values ('{post_id}','{tag_id}');

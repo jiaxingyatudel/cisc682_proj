@@ -141,6 +141,8 @@ class Database:
 
     #tag_info
     #TODO
+    def select_post_tag_info_of_post_id(self,post_id):
+        return self.execute_sql(sql.sql_select_post_tag_info_of_post_id.format(post_id=post_id))
 
     #post_tag
     #TODO

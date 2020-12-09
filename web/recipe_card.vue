@@ -18,6 +18,10 @@
 .recipe_author{
     cursor: pointer;
 }
+
+.recipe_tag{
+    margin-right: 3px;
+}
 </style>
 
 <template>
@@ -26,6 +30,7 @@
         <div class="card-body">
             <h5 class="card-title">{{recipe_info.post_title}}</h5>
             <router-link tag="h6" v-bind:to="'/user_recipes/'+recipe_info.user_id" class="card-subtitle mb-2 text-muted recipe_author"><i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;{{recipe_info.user_name}}</router-link>
+            <p><span v-for="tag in recipe_info.post_tags" v-bind:key="tag.post_id" class="badge badge-dark recipe_tag">{{tag.tag_name}}</span></p>
             <p class="card-text">{{recipe_info.post_text}}</p>
             <p><span class="badge badge-dark">{{print_date_time()}}</span></p>
             <slot></slot>

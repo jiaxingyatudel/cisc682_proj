@@ -268,6 +268,9 @@ def get_following_users():
 def time_stamp_to_str(time_stamp):
     return datetime.datetime.utcfromtimestamp(time_stamp).strftime("%Y-%m-%dT%H:%M:%SZ")
 
+def query_post_tags(post_id):
+    return database.select_post_tag_info_of_post_id(post_id)
+
 @app.route("/get_my_recipes_info",methods=["GET"])
 def get_my_recipes_info():
     args=request.args
@@ -284,6 +287,7 @@ def get_my_recipes_info():
     for i in range(len(my_recipes_info)):
         post_info=my_recipes_info[i]
         post_info["post_time"]=time_stamp_to_str(post_info["post_time_stamp"])
+        post_info["post_tags"]=query_post_tags(post_info["post_id"])
 
     resp=jsonify(
         err=0,
@@ -308,6 +312,7 @@ def get_user_recipes_info():
     for i in range(len(user_recipes_info)):
         post_info=user_recipes_info[i]
         post_info["post_time"]=time_stamp_to_str(post_info["post_time_stamp"])
+        post_info["post_tags"]=query_post_tags(post_info["post_id"])
         post_like_check=database.check_user_like_post_by_user_id_post_id(my_user_id,post_info["post_id"])
         post_info["post_like"]=(len(post_like_check)>0)
 
@@ -333,6 +338,7 @@ def get_liked_recipes_info():
     for i in range(len(liked_recipes_info)):
         post_info=liked_recipes_info[i]
         post_info["post_time"]=time_stamp_to_str(post_info["post_time_stamp"])
+        post_info["post_tags"]=query_post_tags(post_info["post_id"])
         post_info["post_like"]=True
 
     resp=jsonify(
