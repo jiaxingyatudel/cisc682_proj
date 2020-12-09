@@ -46,7 +46,10 @@ Three fellow students were interviewed on potential needs of recipe sharing soci
 
 ### Wireframe and Mockup Prototypes
 
-(WORKING IN PROGRESS)
+![](./wireframe1.png)
+
+![](./mockup1.png)
+
 
 ### Webpage Prototypes
 
