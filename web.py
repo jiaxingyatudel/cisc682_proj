@@ -3,12 +3,14 @@
 from flask import Flask
 from flask import request
 from flask import jsonify
+from flask import send_file
 
 import pymysql
 
 import time
 import datetime
 import random
+import os
 
 from database import Database
 
@@ -263,6 +265,9 @@ def get_following_users():
     )
     return resp
 
+def time_stamp_to_str(time_stamp):
+    return datetime.datetime.utcfromtimestamp(time_stamp).strftime("%Y-%m-%dT%H:%M:%SZ")
+
 @app.route("/get_my_recipes_info",methods=["GET"])
 def get_my_recipes_info():
     args=request.args
@@ -278,12 +283,7 @@ def get_my_recipes_info():
 
     for i in range(len(my_recipes_info)):
         post_info=my_recipes_info[i]
-
-        post_time_stamp=post_info["post_time_stamp"]
-        post_time=datetime.datetime.utcfromtimestamp(post_time_stamp).strftime("%Y-%m-%dT%H:%M:%SZ")
-        post_info["post_time"]=post_time
-
-        post_info["post_img"]=random_place_holder_img_url()
+        post_info["post_time"]=time_stamp_to_str(post_info["post_time_stamp"])
 
     resp=jsonify(
         err=0,
@@ -307,19 +307,37 @@ def get_user_recipes_info():
 
     for i in range(len(user_recipes_info)):
         post_info=user_recipes_info[i]
-
-        post_time_stamp=post_info["post_time_stamp"]
-        post_time=datetime.datetime.utcfromtimestamp(post_time_stamp).strftime("%Y-%m-%dT%H:%M:%SZ")
-        post_info["post_time"]=post_time
-
+        post_info["post_time"]=time_stamp_to_str(post_info["post_time_stamp"])
         post_like_check=database.check_user_like_post_by_user_id_post_id(my_user_id,post_info["post_id"])
         post_info["post_like"]=(len(post_like_check)>0)
-
-        post_info["post_img"]=random_place_holder_img_url()
 
     resp=jsonify(
         err=0,
         user_recipes_info=user_recipes_info
+    )
+    return resp
+
+@app.route("/get_liked_recipes_info",methods=["GET"])
+def get_liked_recipes_info():
+    args=request.args
+
+    user_id=args["user_id"]
+
+    if not check_user_auth_with_id(request,user_id):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    liked_recipes_info=database.select_post_info_join_user_info_join_user_like_post_by_user_id(user_id)
+
+    for i in range(len(liked_recipes_info)):
+        post_info=liked_recipes_info[i]
+        post_info["post_time"]=time_stamp_to_str(post_info["post_time_stamp"])
+        post_info["post_like"]=True
+
+    resp=jsonify(
+        err=0,
+        liked_recipes_info=liked_recipes_info
     )
     return resp
 
@@ -357,8 +375,15 @@ def cancel_like_post():
     resp=jsonify(err=0)
     return resp
 
-def random_place_holder_img_url():
-    return "/web/img/placeholder"+str(random.randint(1,4))+".jpg"
+place_holder_img_dict={}
+@app.route("/place_holder_img/<id>",methods=["GET"])
+def place_holder_img(id):
+    if id not in place_holder_img_dict:
+        path_name="./web/img/"
+        file_name=random.choice(os.listdir(path_name))
+        place_holder_img_dict[id]=path_name+file_name
+
+    return send_file(place_holder_img_dict[id])
 
 if __name__ == '__main__':
     app.run()

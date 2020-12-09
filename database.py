@@ -118,6 +118,10 @@ class Database:
     def select_post_info_join_user_info_by_user_id(self,user_id):
         return self.execute_sql(sql.sql_select_post_info_join_user_info_by_user_id.format(user_id=user_id))
 
+    def select_post_info_join_user_info_join_user_like_post_by_user_id(self,user_id):
+        #select post info with its author name which a user like
+        return self.execute_sql(sql.sql_select_post_info_join_user_info_join_user_like_post_by_user_id.format(user_id=user_id))
+
     #post_ingredient
     #TODO
 

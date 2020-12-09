@@ -41,6 +41,7 @@
             </button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="menu_btn">
                 <router-link class="dropdown-item" to="/following_users"><i class="fa fa-users" aria-hidden="true"></i>&nbsp;Following</router-link>
+                <router-link class="dropdown-item" to="/liked_recipes"><i class="fa fa-heart" aria-hidden="true"></i>&nbsp;Liked Recipes</router-link>
                 <router-link class="dropdown-item" to="/my_recipes"><i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;My Recipes</router-link>
             </div>
         </div>

@@ -32,6 +32,17 @@ const routes=[
         }
     },
     {
+        path:"/liked_recipes",
+        component:httpVueLoader("/web/liked_recipes.vue"),
+        beforeEnter:function(to,from,next){
+            if((store.state.user_checked)&&(!store.state.user_id)){
+                next({path:"/"});
+            }else{
+                next();
+            }
+        }
+    },
+    {
         path:"/my_recipes",
         component:httpVueLoader("/web/my_recipes.vue"),
         beforeEnter:function(to,from,next){

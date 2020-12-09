@@ -38,6 +38,7 @@ create table post_info(
     post_id varchar(255),
     post_title text,
     post_text text,
+    post_title_img varchar(255),
     post_time_stamp int,
     user_id varchar(255),
     primary key (post_id),
@@ -178,7 +179,7 @@ select * from user_info join (
 
 #post_info
 sql_insert_post_info="""
-insert into post_info (post_id,post_title,post_text,post_time_stamp,user_id) values ('{post_id}','{post_title}','{post_text}','{post_time_stamp}','{user_id}');
+insert into post_info (post_id,post_title,post_text,post_title_img,post_time_stamp,user_id) values ('{post_id}','{post_title}','{post_text}','{post_title_img}','{post_time_stamp}','{user_id}');
 """
 
 sql_delete_post_info_by_post_id="""
@@ -201,6 +202,13 @@ sql_select_post_info_join_user_info_by_user_id="""
 select * from user_info join (
     select * from post_info where user_id='{user_id}'
 ) as user_post_info_query on user_post_info_query.user_id=user_info.user_id;
+"""
+
+#select post info with its author name which a user like
+sql_select_post_info_join_user_info_join_user_like_post_by_user_id="""
+select * from user_info join (
+    select * from post_info where post_id in (select post_id from user_like_post where user_id='{user_id}')
+) as user_like_post_info_query on user_like_post_info_query.user_id=user_info.user_id;
 """
 
 #post_ingredient

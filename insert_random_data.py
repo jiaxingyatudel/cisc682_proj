@@ -16,15 +16,15 @@ from lorem_ipsum import LoremIpsum
 import sql
 
 USER_CNT=100
-FOLLOW_USER_CNT_MIN=0
+FOLLOW_USER_CNT_MIN=2
 FOLLOW_USER_CNT_MAX=4
-USER_POST_CNT_MIN=0
+USER_POST_CNT_MIN=2
 USER_POST_CNT_MAX=4
 POST_INGREDIENT_CNT_MIN=4
 POST_INGREDIENT_CNT_MAX=8
 USER_LIKE_POST_CNT_MIN=4
 USER_LIKE_POST_CNT_MAX=8
-POST_COMMENT_CNT_MIN=0
+POST_COMMENT_CNT_MIN=2
 POST_COMMENT_CNT_MAX=4
 TAG_CNT=8
 POST_TAG_CNT_MIN=1
@@ -55,7 +55,8 @@ class PostPool:
             "post_title":post_title,
             "post_text":post_text,
             "post_time_stamp":post_time_stamp,
-            "user_id":user_id
+            "user_id":user_id,
+            "post_title_img":"/place_holder_img/"+uuid.uuid4().hex
         }
         self.posts.append(post)
         return post
@@ -162,6 +163,7 @@ for i in range(len(post_pool.posts)):
         post_id=post["post_id"],
         post_title=post["post_title"],
         post_text=post["post_text"],
+        post_title_img=post["post_title_img"],
         post_time_stamp=post["post_time_stamp"],
         user_id=post["user_id"],
     ))

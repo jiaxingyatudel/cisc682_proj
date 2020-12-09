@@ -8,16 +8,10 @@
                 <recipe-card
                     v-for="recipe_info in user_recipes_info"
                     v-bind:key="recipe_info.post_id"
-                    v-bind:post_id="recipe_info.post_id"
-                    v-bind:user_name="recipe_info.user_name"
-                    v-bind:post_title="recipe_info.post_title"
-                    v-bind:post_text="recipe_info.post_text"
-                    v-bind:post_time="recipe_info.post_time"
-                    v-bind:post_img="recipe_info.post_img"
+                    v-bind:recipe_info="recipe_info"
                 >
-                <div>
-                    <span v-if="!recipe_info.post_like" class="card-link" v-on:click="click_like_post(recipe_info.post_id)"><i class="fa fa-heart-o" aria-hidden="true"></i>&nbsp;Like this recipe to save for later</span>
-                    <span v-if="recipe_info.post_like" class="card-link" v-on:click="click_cancel_like_post(recipe_info.post_id)"><i class="fa fa-heart" aria-hidden="true"></i>&nbsp;Cacel like</span>
+                <div v-if="recipe_info.user_id!=my_user_id">
+                    <recipe-like-btn v-bind:recipe_info="recipe_info" v-bind:user_id="my_user_id"></recipe-like-btn>
                 </div>
                 </recipe-card>
             </div>
@@ -42,7 +36,8 @@ module.exports={
     },
     components:{
         "top-bar":httpVueLoader("/web/top_bar.vue"),
-        "recipe-card":httpVueLoader("/web/recipe_card.vue")
+        "recipe-card":httpVueLoader("/web/recipe_card.vue"),
+        "recipe-like-btn":httpVueLoader("/web/recipe_like_btn.vue")
     },
     mounted:function(){
         this.get_user_name();
@@ -83,63 +78,7 @@ module.exports={
                     this.user_recipes_info=resp.user_recipes_info;
                 }
             }
-        },
-        click_like_post:async function(post_id){
-            if(!this.my_user_id){
-                return;
-            }
-
-            const response=await fetch("/like_post",{
-                method:"POST",
-                credentials:"include",
-                body:JSON.stringify({
-                    post_id:post_id,
-                    user_id:this.my_user_id
-                })
-            });
-            if(response.ok){
-                const resp=await response.json();
-                if(!resp.err){
-                    for(let i=0;i<this.user_recipes_info.length;i++){
-                        recipe_info=this.user_recipes_info[i];
-                        if(recipe_info.post_id==post_id){
-                            recipe_info.post_like=true;
-                            break;
-                        }
-                    }
-                }else{
-                    alert("System error")
-                }
-            }
-        },
-        click_cancel_like_post:async function(post_id){
-            if(!this.my_user_id){
-                return;
-            }
-
-            const response=await fetch("/cancel_like_post",{
-                method:"POST",
-                credentials:"include",
-                body:JSON.stringify({
-                    post_id:post_id,
-                    user_id:this.my_user_id
-                })
-            });
-            if(response.ok){
-                const resp=await response.json();
-                if(!resp.err){
-                    for(let i=0;i<this.user_recipes_info.length;i++){
-                        recipe_info=this.user_recipes_info[i];
-                        if(recipe_info.post_id==post_id){
-                            recipe_info.post_like=false;
-                            break;
-                        }
-                    }
-                }else{
-                    alert("System error")
-                }
-            }
-        },
+        }
     }
 }
 </script>
