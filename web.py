@@ -8,6 +8,7 @@ import pymysql
 
 import time
 import datetime
+import random
 
 from database import Database
 
@@ -16,6 +17,14 @@ database_password=input("[database password]")
 database=Database(database_user,database_password)
 
 app=Flask(__name__,static_folder="./web/")
+
+def check_user_auth_with_id(request,user_id):
+    user_cookie_value=request.cookies.get("user_cookie_value")
+    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
+    if((len(user_cookie_check)<1)or(user_cookie_check[0]["user_id"]!=user_id)):
+        return False
+    else:
+        return True
 
 @app.route("/",methods=["GET"])
 def page():
@@ -110,9 +119,7 @@ def get_user_info_all():
 
     user_id=args["user_id"]
 
-    user_cookie_value=request.cookies.get("user_cookie_value")
-    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
-    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=user_id)):
+    if not check_user_auth_with_id(request,user_id):
         #cookie check fail
         resp=jsonify(err=1)
         return resp
@@ -128,19 +135,32 @@ def get_user_info_all():
     )
     return resp
 
+@app.route("/get_user_name_by_user_id",methods=["GET"])
+def get_user_name_by_user_id():
+    args=request.args
+
+    user_id=args["user_id"]
+
+    user_info=database.select_user_info_by_user_id(user_id)[0]
+
+    resp=jsonify(
+        err=0,
+        user_id=user_info["user_id"],
+        user_name=user_info["user_name"]
+    )
+    return resp
+
 @app.route("/user_change_user_name",methods=["POST"])
 def user_change_user_name():
     req=request.get_json(force=True)
 
-    user_cookie_value=request.cookies.get("user_cookie_value")
-    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
-    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=req["user_id"])):
+    user_id=req["user_id"]
+    user_name=req["user_name"]
+
+    if not check_user_auth_with_id(request,user_id):
         #cookie check fail
         resp=jsonify(err=1)
         return resp
-
-    user_id=req["user_id"]
-    user_name=req["user_name"]
 
     database.update_user_info_user_name_by_user_id(user_id,user_name)
 
@@ -157,9 +177,7 @@ def user_change_user_email():
     user_id=req["user_id"]
     user_email=req["user_email"]
 
-    user_cookie_value=request.cookies.get("user_cookie_value")
-    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
-    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=user_id)):
+    if not check_user_auth_with_id(request,user_id):
         #cookie check fail
         resp=jsonify(err=1)
         return resp
@@ -187,9 +205,7 @@ def user_change_password():
     user_old_password=req["user_old_password"]
     user_new_password=req["user_new_password"]
 
-    user_cookie_value=request.cookies.get("user_cookie_value")
-    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
-    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=user_id)):
+    if not check_user_auth_with_id(request,user_id):
         #cookie check fail
         resp=jsonify(err=1)
         return resp
@@ -218,9 +234,7 @@ def user_logout_all():
 
     user_id=req["user_id"]
 
-    user_cookie_value=request.cookies.get("user_cookie_value")
-    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
-    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=user_id)):
+    if not check_user_auth_with_id(request,user_id):
         #cookie check fail
         resp=jsonify(err=1)
         return resp
@@ -236,9 +250,7 @@ def get_following_users():
 
     user_id=args["user_id"]
 
-    user_cookie_value=request.cookies.get("user_cookie_value")
-    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
-    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=user_id)):
+    if not check_user_auth_with_id(request,user_id):
         #cookie check fail
         resp=jsonify(err=1)
         return resp
@@ -257,9 +269,7 @@ def get_my_recipes_info():
 
     user_id=args["user_id"]
 
-    user_cookie_value=request.cookies.get("user_cookie_value")
-    user_cookie_check=database.check_user_cookie_by_user_cookie_value(user_cookie_value)
-    if((len(user_cookie_check)<1) or (user_cookie_check[0]["user_id"]!=user_id)):
+    if not check_user_auth_with_id(request,user_id):
         #cookie check fail
         resp=jsonify(err=1)
         return resp
@@ -268,15 +278,87 @@ def get_my_recipes_info():
 
     for i in range(len(my_recipes_info)):
         post_info=my_recipes_info[i]
+
         post_time_stamp=post_info["post_time_stamp"]
         post_time=datetime.datetime.utcfromtimestamp(post_time_stamp).strftime("%Y-%m-%dT%H:%M:%SZ")
         post_info["post_time"]=post_time
+
+        post_info["post_img"]=random_place_holder_img_url()
 
     resp=jsonify(
         err=0,
         my_recipes_info=my_recipes_info
     )
     return resp
+
+@app.route("/get_user_recipes_info",methods=["GET"])
+def get_user_recipes_info():
+    args=request.args
+
+    user_id=args["user_id"]
+    my_user_id=args["my_user_id"]
+
+    if not check_user_auth_with_id(request,my_user_id):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    user_recipes_info=database.select_post_info_join_user_info_by_user_id(user_id)
+
+    for i in range(len(user_recipes_info)):
+        post_info=user_recipes_info[i]
+
+        post_time_stamp=post_info["post_time_stamp"]
+        post_time=datetime.datetime.utcfromtimestamp(post_time_stamp).strftime("%Y-%m-%dT%H:%M:%SZ")
+        post_info["post_time"]=post_time
+
+        post_like_check=database.check_user_like_post_by_user_id_post_id(my_user_id,post_info["post_id"])
+        post_info["post_like"]=(len(post_like_check)>0)
+
+        post_info["post_img"]=random_place_holder_img_url()
+
+    resp=jsonify(
+        err=0,
+        user_recipes_info=user_recipes_info
+    )
+    return resp
+
+@app.route("/like_post",methods=["POST"])
+def like_post():
+    req=request.get_json(force=True)
+
+    user_id=req["user_id"]
+    post_id=req["post_id"]
+
+    if not check_user_auth_with_id(request,user_id):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    database.insert_user_like_post(user_id,post_id)
+
+    resp=jsonify(err=0)
+    return resp
+
+@app.route("/cancel_like_post",methods=["POST"])
+def cancel_like_post():
+    req=request.get_json(force=True)
+
+    user_id=req["user_id"]
+    post_id=req["post_id"]
+
+    if not check_user_auth_with_id(request,user_id):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    database.delete_user_like_post_by_user_id_post_id(user_id,post_id)
+
+    resp=jsonify(err=0)
+    return resp
+
+def random_place_holder_img_url():
+    return "/web/img/placeholder"+str(random.randint(1,4))+".jpg"
 
 if __name__ == '__main__':
     app.run()

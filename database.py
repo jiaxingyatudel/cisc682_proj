@@ -123,6 +123,14 @@ class Database:
 
     #user_like_post
     #TODO
+    def check_user_like_post_by_user_id_post_id(self,user_id,post_id):
+        return self.execute_sql(sql.sql_check_user_like_post_by_user_id_post_id.format(user_id=user_id,post_id=post_id))
+
+    def insert_user_like_post(self,user_id,post_id):
+        return self.execute_sql(sql.sql_insert_user_like_post.format(user_id=user_id,post_id=post_id))
+
+    def delete_user_like_post_by_user_id_post_id(self,user_id,post_id):
+        return self.execute_sql(sql.sql_delete_user_like_post_by_user_id_post_id.format(user_id=user_id,post_id=post_id))
 
     #comment_info
     #TODO

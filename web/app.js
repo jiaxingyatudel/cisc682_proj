@@ -43,6 +43,11 @@ const routes=[
         }
     },
     {
+        path:"/user_recipes/:user_id",
+        component:httpVueLoader("/web/user_recipes.vue"),
+        props:true
+    },
+    {
         path:"/compose",
         component:httpVueLoader("/web/compose.vue"),
         beforeEnter:function(to,from,next){

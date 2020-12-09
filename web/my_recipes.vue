@@ -13,6 +13,7 @@
                     v-bind:post_title="recipe_info.post_title"
                     v-bind:post_text="recipe_info.post_text"
                     v-bind:post_time="recipe_info.post_time"
+                    v-bind:post_img="recipe_info.post_img"
                 >
                 <div><span class="card-link"><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Edit</span></div>
                 </recipe-card>

@@ -229,6 +229,10 @@ sql_delete_user_like_post_by_user_id_post_id="""
 delete from user_like_post where user_id='{user_id}' and post_id='{post_id}';
 """
 
+sql_check_user_like_post_by_user_id_post_id="""
+select * from user_like_post where user_id='{user_id}' and post_id='{post_id}';
+"""
+
 #comment_info
 sql_insert_comment_info="""
 insert into comment_info (comment_id,comment_text,comment_time_stamp,post_id,user_id) values ('{comment_id}','{comment_text}','{comment_time_stamp}','{post_id}','{user_id}');
