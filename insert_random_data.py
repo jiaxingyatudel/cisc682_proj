@@ -36,11 +36,12 @@ class UserPool:
     def __init__(self):
         self.users=[]
 
-    def new_user_info(self,user_name,user_email):
+    def new_user_info(self,user_name,user_email,user_intro):
         user={
             "user_id":uuid.uuid4().hex,
             "user_name":user_name,
-            "user_email":user_email
+            "user_email":user_email,
+            "user_intro":user_intro
         }
         self.users.append(user)
         return user
@@ -112,15 +113,16 @@ for i in range(USER_CNT):
         break
 
     user=user_pool.new_user_info(
-        "{first_name} {last_name}".format(first_name=name["first_name"],last_name=name["last_name"]),
-        "{first_name}.{last_name}@example.com".format(first_name=name["first_name"],last_name=name["last_name"])
+        user_name="{first_name} {last_name}".format(first_name=name["first_name"],last_name=name["last_name"]),
+        user_email="{first_name}.{last_name}@example.com".format(first_name=name["first_name"],last_name=name["last_name"]),
+        user_intro=lorem_ipsum.generate_sentence(4,8,6)
     )
 
     user["user_password"]=hashlib.sha256("PASSWORD".encode("utf-8")).hexdigest()
 
 for i in range(len(user_pool.users)):
     user=user_pool.users[i]
-    cursor.execute(sql.sql_insert_user_info.format(user_id=user["user_id"],user_name=user["user_name"]))
+    cursor.execute(sql.sql_insert_user_info.format(user_id=user["user_id"],user_name=user["user_name"],user_intro=user["user_intro"]))
     cursor.execute(sql.sql_insert_user_security.format(user_id=user["user_id"],user_email=user["user_email"],user_password=user["user_password"]))
 
 #user_follow

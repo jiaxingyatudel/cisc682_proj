@@ -23,10 +23,10 @@ class Database:
         return result
 
     #user_info
-    def insert_user_info(self,user_name):
+    def insert_user_info(self,user_name,user_intro):
         user_id=uuid.uuid4().hex
 
-        self.execute_sql(sql.sql_insert_user_info.format(user_id=user_id,user_name=user_name))
+        self.execute_sql(sql.sql_insert_user_info.format(user_id=user_id,user_name=user_name,user_intro=user_intro))
 
         return {
             "user_id":user_id,
@@ -38,6 +38,9 @@ class Database:
 
     def update_user_info_user_name_by_user_id(self,user_id,user_name):
         return self.execute_sql(sql.sql_update_user_info_user_name_by_user_id.format(user_id=user_id,user_name=user_name))
+
+    def update_user_info_user_intro_by_user_id(self,user_id,user_intro):
+        return self.execute_sql(sql.sql_update_user_info_user_intro_by_user_id.format(user_id=user_id,user_intro=user_intro))
 
     def select_user_info_by_user_id(self,user_id):
         return self.execute_sql(sql.sql_select_user_info_by_user_id.format(user_id=user_id))
@@ -153,10 +156,4 @@ class Database:
 if __name__=="__main__":
     database_user=input("[database user name]")
     database_password=input("[database password]")
-
     database=Database(database_user,database_password)
-
-    print(database.insert_user_info(input("[insert user info][user_name]")))
-    print(database.delete_user_info_by_user_id(input("[delete user info][user_id]")))
-    print(database.update_user_info_user_name_by_user_id(input("[update user info][user_id]"),input("[update user info][user_name]")))
-    print(database.select_user_info_by_user_id(input("[slect user info][user_id]")))

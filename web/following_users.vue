@@ -6,12 +6,15 @@
         <div class="content_container">
             <div class="content">
                 <ul class="list-group">
-                    <router-link v-bind:to="'/user_recipes/'+following_user.user_id" class="list-group-item list-group-item-action" v-for="following_user in following_users_info" v-bind:key="following_user.user_id">
-                        <span>{{following_user.user_name}}</span>
+                    <li class="list-group-item" v-for="following_user in following_users_info" v-bind:key="following_user.user_id">
+                        <router-link v-bind:to="'/user_recipes/'+following_user.user_id" tag="div" style="float:left;cursor:pointer">
+                            <div><i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;{{following_user.user_name}}</div>
+                            <div><small>{{following_user.user_intro}}</small></div>
+                        </router-link>
                         <button type="button" class="btn btn-outline-danger" style="float:right">
                             <span><i class="fa fa-user-times" aria-hidden="true"></i></span>
                         </button>
-                    </router-link>
+                    </li>
                 </ul>
             </div>
         </div>

@@ -7,6 +7,7 @@ use cisc637;
 create table user_info(
     user_id varchar(255),
     user_name varchar(255),
+    user_intro text,
     primary key (user_id)
 );
 
@@ -93,7 +94,7 @@ create table user_follow_tag(
 
 #user_info
 sql_insert_user_info="""
-insert into user_info (user_id,user_name) values ('{user_id}','{user_name}');
+insert into user_info (user_id,user_name,user_intro) values ('{user_id}','{user_name}','{user_intro}');
 """
 
 sql_delete_user_info_by_user_id="""
@@ -102,6 +103,11 @@ delete from user_info where user_id='{user_id}';
 
 sql_update_user_info_user_name_by_user_id="""
 update user_info set user_name='{user_name}' where user_id='{user_id}';
+"""
+
+sql_update_user_info_user_intro_by_user_id="""
+update user_info set user_intro='{user_intro}' where user_id='{user_id}';
+
 """
 
 sql_select_user_info_by_user_id="""

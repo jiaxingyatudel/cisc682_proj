@@ -38,14 +38,14 @@
 .user_login_input_group_prepend>span,
 .user_info_input_group_prepend>span,
 .password_input_group_prepend>span{
-    width: 140px;
+    min-width: 140px;
 }
 </style>
 
 <template>
     <div>
         <div id="user_btn_container">
-            <div v-if="!user_info_get">
+            <div v-if="((user_checked)&&(!user_id))">
                 <button type="button" class="btn btn-light" v-on:click="click_register_btn">Register</button>
                 <button type="button" class="btn btn-dark" v-on:click="click_login_btn">Login</button>
             </div>
@@ -64,7 +64,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div v-if="!user_info_get">
+                        <div v-if="((user_checked)&&(!user_id))">
                             <div class="container">
                                 <ul class="nav nav-tabs user_login_register_nav">
                                     <li class="nav-item">
@@ -105,13 +105,15 @@
                         </div>
                         <div v-if="user_info_get">
                             <user-info-input-group title="Name" v-bind:old_value="user_name" v-model="user_info_input_user_name" v-on:confirm="click_user_info_user_name_confirm()"></user-info-input-group>
-                            <user-info-input-group title="Name" v-bind:old_value="user_email" v-model="user_info_input_user_email" v-on:confirm="click_user_info_user_email_confirm()"></user-info-input-group>
+                            <user-info-input-group title="Email" v-bind:old_value="user_email" v-model="user_info_input_user_email" v-on:confirm="click_user_info_user_email_confirm()"></user-info-input-group>
+                            <user-info-input-group title="Describe yourself" v-bind:old_value="user_intro" v-model="user_info_input_user_intro" v-on:confirm="click_user_info_user_intro_confirm()"></user-info-input-group>
                             <hr>
                             <div v-if="!change_password_toggle" class="btn-group">
                                 <button type="button" class="btn btn-outline-secondary" v-on:click="click_change_password_toggle()">Change password</button>
                             </div>
                             <div v-if="change_password_toggle">
                                 <password-input-group title="Old password" v-model="change_password_old_password"></password-input-group>
+                                <label for="basic-url">Password needs to be longer than 8 digits</label>
                                 <password-input-group title="New password" v-model="change_password_new_password"></password-input-group>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-outline-secondary" v-on:click="click_change_password_toggle()">Cancel</button>
@@ -137,6 +139,7 @@ module.exports={
         return {
             user_name:"",
             user_email:"",
+            user_intro:"",
             user_info_get:false,
             user_login_register_toogle:false,
             register_user_name:"",
@@ -146,6 +149,7 @@ module.exports={
             login_user_password:"",
             user_info_input_user_name:"",
             user_info_input_user_email:"",
+            user_info_input_user_intro:"",
             change_password_toggle:false,
             change_password_old_password:"",
             change_password_new_password:""
@@ -154,6 +158,9 @@ module.exports={
     computed:{
         user_id:function(){
             return store.state.user_id;
+        },
+        user_checked:function(){
+            return store.state.user_checked;
         }
     },
     watch:{
@@ -183,6 +190,7 @@ module.exports={
                 if(!resp.err){
                     this.user_name=resp.user_name;
                     this.user_email=resp.user_email;
+                    this.user_intro=resp.user_intro;
                     this.register_user_name="";
                     this.register_user_email="";
                     this.register_user_password="";
@@ -330,6 +338,7 @@ module.exports={
                 const resp=await response.json();
                 if(!resp.err){
                     this.user_name=resp.user_name;
+                    this.user_info_input_user_name="";
                 }
                 if(resp.err==1){
                     alert("System error");
@@ -353,6 +362,34 @@ module.exports={
                 const resp=await response.json();
                 if(!resp.err){
                     this.user_email=resp.user_email;
+                    this.user_info_input_user_email="";
+                }
+                if(resp.err==1){
+                    alert("System error");
+                }
+                if(resp.err==2){
+                    alert("Email already registered");
+                }
+            }
+        },
+        click_user_info_user_intro_confirm:async function(){
+            let b=confirm("Are you sure to change your introduction to "+this.user_info_input_user_intro+"?");
+            if(!b){
+                return;
+            }
+            const response=await fetch("/user_change_user_intro",{
+                method:"POST",
+                credentials:"include",
+                body:JSON.stringify({
+                    user_id:this.user_id,
+                    user_intro:this.user_info_input_user_intro
+                })
+            });
+            if(response.ok){
+                const resp=await response.json();
+                if(!resp.err){
+                    this.user_intro=resp.user_intro;
+                    this.user_info_input_user_intro="";
                 }
                 if(resp.err==1){
                     alert("System error");
@@ -372,6 +409,12 @@ module.exports={
             if(!b){
                 return;
             }
+
+            if(this.change_password_new_password.length<=8){
+                alert("Password needs to be longer than 8 digits")
+                return;
+            }
+
             const response=await fetch("/user_change_password",{
                 method:"POST",
                 credentials:"include",

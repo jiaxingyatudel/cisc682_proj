@@ -133,6 +133,7 @@ def get_user_info_all():
         err=0,
         user_id=user_info["user_id"],
         user_name=user_info["user_name"],
+        user_intro=user_info["user_intro"],
         user_email=user_security["user_email"]
     )
     return resp
@@ -195,6 +196,26 @@ def user_change_user_email():
     resp=jsonify(
         err=0,
         user_email=user_email
+    )
+    return resp
+
+@app.route("/user_change_user_intro",methods=["POST"])
+def user_change_user_intro():
+    req=request.get_json(force=True)
+
+    user_id=req["user_id"]
+    user_intro=req["user_intro"]
+
+    if not check_user_auth_with_id(request,user_id):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    database.update_user_info_user_intro_by_user_id(user_id,user_intro)
+
+    resp=jsonify(
+        err=0,
+        user_intro=user_intro
     )
     return resp
 
