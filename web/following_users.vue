@@ -18,7 +18,7 @@
                 </ul>
             </div>
         </div>
-        <top-bar title="Following"></top-bar>
+        <top-bar title="Following" v-bind:top_bar_search="true"></top-bar>
     </div>
 </template>
 

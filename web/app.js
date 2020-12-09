@@ -14,10 +14,12 @@ const store=new Vuex.Store({
 const routes=[
     {
         path:"/",
+        name:"home",
         component:httpVueLoader("/web/home.vue")
     },
     {
         path:"/home",
+        name:"home",
         component:httpVueLoader("/web/home.vue")
     },
     {
@@ -33,6 +35,7 @@ const routes=[
     },
     {
         path:"/liked_recipes",
+        name:"liked_recipes",
         component:httpVueLoader("/web/liked_recipes.vue"),
         beforeEnter:function(to,from,next){
             if((store.state.user_checked)&&(!store.state.user_id)){
@@ -44,6 +47,7 @@ const routes=[
     },
     {
         path:"/my_recipes",
+        name:"my_recipes",
         component:httpVueLoader("/web/my_recipes.vue"),
         beforeEnter:function(to,from,next){
             if((store.state.user_checked)&&(!store.state.user_id)){
@@ -55,11 +59,13 @@ const routes=[
     },
     {
         path:"/user_recipes/:user_id",
+        name:"user_recipes",
         component:httpVueLoader("/web/user_recipes.vue"),
         props:true
     },
     {
         path:"/compose",
+        name:"compose",
         component:httpVueLoader("/web/compose.vue"),
         beforeEnter:function(to,from,next){
             if((store.state.user_checked)&&(!store.state.user_id)){
@@ -70,6 +76,10 @@ const routes=[
         }
     }
 ];
+
+const router=new VueRouter({
+    routes:routes
+});
 
 (async function(){
     const response=await fetch("/check_user_cookie",{
@@ -83,10 +93,6 @@ const routes=[
         }else{
             store.commit("user_check",false);
         }
-
-        const router=new VueRouter({
-            routes:routes
-        });
 
         new Vue({
             el:"#app",

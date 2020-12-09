@@ -14,7 +14,7 @@
                 </recipe-card>
             </div>
         </div>
-        <top-bar title="My Recipes"></top-bar>
+        <top-bar title="My Recipes" v-bind:top_bar_search="true"></top-bar>
     </div>
 </template>
 

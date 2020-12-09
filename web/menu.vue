@@ -45,7 +45,7 @@
                 <router-link class="dropdown-item" to="/my_recipes"><i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;My Recipes</router-link>
             </div>
         </div>
-        <div id="compose_btn_container" v-if="user_id">
+        <div id="compose_btn_container" v-if="((user_id)&&($route.name!='compose'))">
             <router-link tag="button" class="btn btn-dark" id="compose_btn" type="button" to="/compose">
                 <span><i class="fa fa-pencil" aria-hidden="true"></i></span><span id="share_your_recipe">Share your recipe</span>
             </router-link>

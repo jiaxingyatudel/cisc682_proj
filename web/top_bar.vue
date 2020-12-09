@@ -28,7 +28,7 @@
 <template>
     <div id="top_bar">
         <div id="top_bar_title_container">{{title}}</div>
-        <div class="input-group" id="top_bar_search">
+        <div v-if="top_bar_search" class="input-group" id="top_bar_search">
             <input type="text" class="form-control" placeholder="">
             <div class="input-group-append">
                 <button class="btn btn-dark" type="button"><i class="fa fa-search" aria-hidden="true"></i></button>
@@ -39,6 +39,6 @@
 
 <script>
 module.exports={
-    props:["title"]
+    props:["title","top_bar_search"]
 }
 </script>

@@ -88,7 +88,7 @@
                                     </div>
                                     <input type="text" class="form-control" v-model="register_user_email">
                                 </div>
-                                <label for="basic-url">Password needs to be longer than 8 digits</label>
+                                <label>Password needs to be longer than 8 digits</label>
                                 <password-input-group title="Password" v-model="register_user_password"></password-input-group>
                                 <button type="button" class="btn btn-outline-secondary" v-on:click="click_user_register()">Register</button>
                             </div>
@@ -113,7 +113,7 @@
                             </div>
                             <div v-if="change_password_toggle">
                                 <password-input-group title="Old password" v-model="change_password_old_password"></password-input-group>
-                                <label for="basic-url">Password needs to be longer than 8 digits</label>
+                                <label>Password needs to be longer than 8 digits</label>
                                 <password-input-group title="New password" v-model="change_password_new_password"></password-input-group>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-outline-secondary" v-on:click="click_change_password_toggle()">Cancel</button>

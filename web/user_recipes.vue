@@ -16,7 +16,7 @@
                 </recipe-card>
             </div>
         </div>
-        <top-bar v-bind:title="(user_name)?(user_name+'\'s Recipes'):('')"></top-bar>
+        <top-bar v-bind:title="(user_name)?(user_name+'\'s Recipes'):('')" v-bind:top_bar_search="true"></top-bar>
     </div>
 </template>
 
