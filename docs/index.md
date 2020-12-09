@@ -57,7 +57,7 @@ Webpage prototypes are made to be interactable, by which test users can experien
 
 ## Prototype Demonstration Video
 
-[Link to Prototype Demonstration Video]()
+[Link to Prototype Demonstration Video](https://youtu.be/S8fyJVCcpJE)
 
 ## Project Proposal and Presentation Slides
 
