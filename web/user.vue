@@ -88,6 +88,12 @@
                                     </div>
                                     <input type="text" class="form-control" v-model="register_user_email">
                                 </div>
+                                <div class="input-group user_register_input_group">
+                                    <div class="input-group-prepend user_register_input_group_prepend">
+                                        <span class="input-group-text">Describe yourself</span>
+                                    </div>
+                                    <input type="text" class="form-control" v-model="register_user_intro">
+                                </div>
                                 <label>Password needs to be longer than 8 digits</label>
                                 <password-input-group title="Password" v-model="register_user_password"></password-input-group>
                                 <button type="button" class="btn btn-outline-secondary" v-on:click="click_user_register()">Register</button>
@@ -144,6 +150,7 @@ module.exports={
             user_login_register_toogle:false,
             register_user_name:"",
             register_user_email:"",
+            register_user_intro:"",
             register_user_password:"",
             login_user_email:"",
             login_user_password:"",
@@ -232,7 +239,8 @@ module.exports={
                 body:JSON.stringify({
                     user_name:this.register_user_name,
                     user_email:this.register_user_email,
-                    user_password:this.register_user_password
+                    user_password:this.register_user_password,
+                    user_intro:this.register_user_intro
                 })
             });
             if(response.ok){

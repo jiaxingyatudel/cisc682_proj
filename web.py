@@ -39,6 +39,7 @@ def user_register():
     user_name=req["user_name"]
     user_email=req["user_email"]
     user_password=req["user_password"]
+    user_intro=req["user_intro"]
 
     query=database.check_user_security_by_user_email(user_email)
     
@@ -49,7 +50,7 @@ def user_register():
         )
         return resp
     else:
-        user_info=database.insert_user_info(user_name)
+        user_info=database.insert_user_info(user_name,user_intro)
         database.insert_user_security(user_info["user_id"],user_email,user_password)
         cookie=database.insert_user_cookie(user_info["user_id"])
 
