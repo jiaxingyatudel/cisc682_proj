@@ -12,11 +12,19 @@ Main motivation and target of this project is to research on user interface desi
 
 ### Jiaxing Yang
 
+![](https://avatars0.githubusercontent.com/u/55218421?s=460&v=4)
+
 The team leader and programmer, implemented major part of programming and testing.
+
+[Jiaxing Yang's Github Profile](https://github.com/jiaxingyatudel)
 
 ### Tao Xie
 
+![](https://avatars3.githubusercontent.com/u/7379039?s=460&u=687b3bb13dae94bda046b0d74a5b1a017d2becb9&v=4)
+
 The designer and prototype sketcher, mainly studied social network software design principals, and designed prototype of this project.
+
+[Tao Xie's Github Profile](https://github.com/ChristopherSTAN)
 
 ## Need Finding Process
 
@@ -42,9 +50,11 @@ Three fellow students were interviewed on potential needs of recipe sharing soci
 
 ### Webpage Prototypes
 
-These webpage prototypes are made to be interactable, by which test users can experience the user interface, and provide feedback on potential design flaws or problems if any difficulties occurred in test use sessions.
+Webpage prototypes are made to be interactable, by which test users can experience the user interface, and provide feedback on potential design flaws or problems if any difficulties occurred in test use sessions.
 
-This [link]() is an example of candidate webpage prototype.
+## Prototype Demonstration Video
+
+[Link to Prototype Demonstration Video]()
 
 ## Project Proposal and Presentation Slides
 
