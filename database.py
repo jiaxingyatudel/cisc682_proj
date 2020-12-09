@@ -107,13 +107,16 @@ class Database:
 
     #user_follow
     #TODO
-    def select_user_follow_with_user_info_by_user_id(self,user_id):
-        return self.execute_sql(sql.sql_select_user_follow_with_user_info_by_user_id.format(user_id=user_id))
+    def select_user_follow_join_user_info_by_user_id(self,user_id):
+        return self.execute_sql(sql.sql_select_user_follow_join_user_info_by_user_id.format(user_id=user_id))
 
     #post_info
     #TODO
     def select_post_info_by_user_id(self,user_id):
         return self.execute_sql(sql.sql_select_post_info_by_user_id.format(user_id=user_id))
+
+    def select_post_info_join_user_info_by_user_id(self,user_id):
+        return self.execute_sql(sql.sql_select_post_info_join_user_info_by_user_id.format(user_id=user_id))
 
     #post_ingredient
     #TODO

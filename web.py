@@ -243,7 +243,7 @@ def get_following_users():
         resp=jsonify(err=1)
         return resp
 
-    following_users_info=database.select_user_follow_with_user_info_by_user_id(user_id)
+    following_users_info=database.select_user_follow_join_user_info_by_user_id(user_id)
 
     resp=jsonify(
         err=0,
@@ -264,7 +264,7 @@ def get_my_recipes_info():
         resp=jsonify(err=1)
         return resp
 
-    my_recipes_info=database.select_post_info_by_user_id(user_id)
+    my_recipes_info=database.select_post_info_join_user_info_by_user_id(user_id)
 
     for i in range(len(my_recipes_info)):
         post_info=my_recipes_info[i]

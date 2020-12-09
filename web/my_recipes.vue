@@ -9,10 +9,12 @@
                     v-for="recipe_info in my_recipes_info"
                     v-bind:key="recipe_info.post_id"
                     v-bind:post_id="recipe_info.post_id"
+                    v-bind:user_name="recipe_info.user_name"
                     v-bind:post_title="recipe_info.post_title"
                     v-bind:post_text="recipe_info.post_text"
                     v-bind:post_time="recipe_info.post_time"
                 >
+                <div><span class="card-link"><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Edit</span></div>
                 </recipe-card>
             </div>
         </div>
