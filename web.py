@@ -324,10 +324,11 @@ def get_user_recipes_info():
     user_id=args["user_id"]
     my_user_id=args["my_user_id"]
 
-    if not check_user_auth_with_id(request,my_user_id):
-        #cookie check fail
-        resp=jsonify(err=1)
-        return resp
+    user_login=False
+
+    if check_user_auth_with_id(request,my_user_id):
+        #cookie check
+        user_login=True
 
     user_recipes_info=database.select_post_info_join_user_info_by_user_id(user_id)
 
@@ -335,8 +336,12 @@ def get_user_recipes_info():
         post_info=user_recipes_info[i]
         post_info["post_time"]=time_stamp_to_str(post_info["post_time_stamp"])
         post_info["post_tags"]=query_post_tags(post_info["post_id"])
-        post_like_check=database.check_user_like_post_by_user_id_post_id(my_user_id,post_info["post_id"])
-        post_info["post_like"]=(len(post_like_check)>0)
+
+        if(user_login):
+            post_like_check=database.check_user_like_post_by_user_id_post_id(my_user_id,post_info["post_id"])
+            post_info["post_like"]=(len(post_like_check)>0)
+        else:
+            post_info["post_like"]=False
 
     resp=jsonify(
         err=0,

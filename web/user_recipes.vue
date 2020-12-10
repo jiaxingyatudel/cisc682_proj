@@ -10,7 +10,7 @@
                     v-bind:key="recipe_info.post_id"
                     v-bind:recipe_info="recipe_info"
                 >
-                <div v-if="recipe_info.user_id!=my_user_id">
+                <div v-if="((my_user_id)&&(recipe_info.user_id!=my_user_id))">
                     <recipe-like-btn v-bind:recipe_info="recipe_info" v-bind:user_id="my_user_id"></recipe-like-btn>
                 </div>
                 </recipe-card>
@@ -60,10 +60,6 @@ module.exports={
             }
         },
         get_user_recipes_info:async function(){
-            if((!this.user_id)||(!this.my_user_id)){
-                return;
-            }
-
             const params=new URLSearchParams({
                 "user_id":this.user_id,
                 "my_user_id":this.my_user_id
