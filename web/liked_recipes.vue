@@ -16,7 +16,7 @@
                 </recipe-card>
             </div>
         </div>
-        <top-bar title="Liked Recipes" v-bind:top_bar_search="true"></top-bar>
+        <top-bar v-bind:top_bar_search="true"><span>Liked Recipes</span></top-bar>
     </div>
 </template>
 

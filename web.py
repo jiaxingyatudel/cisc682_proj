@@ -287,6 +287,60 @@ def get_following_users():
     )
     return resp
 
+@app.route("/check_user_following",methods=["GET"])
+def check_user_following():
+    args=request.args
+
+    user_id=args["user_id"]
+    my_user_id=args["my_user_id"]
+
+    if not check_user_auth_with_id(request,my_user_id):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    check_user_following=database.check_user_follow_by_user_id(my_user_id,user_id)
+
+    resp=jsonify(
+        err=0,
+        user_following=(len(check_user_following)>0)
+    )
+    return resp
+
+@app.route("/follow_user",methods=["POST"])
+def follow_user():
+    req=request.get_json(force=True)
+
+    user_id=req["user_id"]
+    my_user_id=req["my_user_id"]
+
+    if not check_user_auth_with_id(request,my_user_id):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    database.insert_user_follow(my_user_id,user_id)
+
+    resp=jsonify(err=0)
+    return resp
+
+@app.route("/cancel_follow_user",methods=["POST"])
+def cancel_follow_user():
+    req=request.get_json(force=True)
+
+    user_id=req["user_id"]
+    my_user_id=req["my_user_id"]
+
+    if not check_user_auth_with_id(request,my_user_id):
+        #cookie check fail
+        resp=jsonify(err=1)
+        return resp
+
+    database.delete_user_follow_by_user_id_follow_id(my_user_id,user_id)
+
+    resp=jsonify(err=0)
+    return resp
+
 def time_stamp_to_str(time_stamp):
     return datetime.datetime.utcfromtimestamp(time_stamp).strftime("%Y-%m-%dT%H:%M:%SZ")
 

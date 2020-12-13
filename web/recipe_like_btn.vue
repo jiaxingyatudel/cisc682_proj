@@ -13,6 +13,10 @@ module.exports={
     props:["recipe_info","user_id"],
     methods:{
         click_like_post:async function(){
+            if(!this.user_id){
+                return false;
+            }
+
             const response=await fetch("/like_post",{
                 method:"POST",
                 credentials:"include",
@@ -31,6 +35,10 @@ module.exports={
             }
         },
         click_cancel_like_post:async function(post_id){
+            if(!this.user_id){
+                return false;
+            }
+
             const response=await fetch("/cancel_like_post",{
                 method:"POST",
                 credentials:"include",

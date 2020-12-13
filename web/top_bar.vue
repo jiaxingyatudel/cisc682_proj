@@ -27,7 +27,7 @@
 
 <template>
     <div id="top_bar">
-        <div id="top_bar_title_container">{{title}}</div>
+        <div id="top_bar_title_container"><slot></slot></div>
         <div v-if="top_bar_search" class="input-group" id="top_bar_search">
             <input type="text" class="form-control" placeholder="">
             <div class="input-group-append">

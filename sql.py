@@ -177,6 +177,10 @@ sql_select_user_follow_by_follow_id="""
 select * from user_follow where follow_id='{follow_id}';
 """
 
+sql_check_user_follow_by_follow_id="""
+select * from user_follow where user_id='{user_id}' and follow_id='{follow_id}';
+"""
+
 sql_select_user_follow_join_user_info_by_user_id="""
 select * from user_info join (
     select follow_id from user_follow where user_id='{user_id}'

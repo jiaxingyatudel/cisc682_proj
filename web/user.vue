@@ -284,6 +284,11 @@ module.exports={
             }
         },
         click_user_logout:async function(){
+            let b=confirm("Are you sure to logout from this client?");
+            if(!b){
+                return;
+            }
+
             const response=await fetch("/user_logout",{
                 method:"POST",
                 credentials:"include"
@@ -304,6 +309,11 @@ module.exports={
             }
         },
         click_user_logout_all:async function(){
+            let b=confirm("Are you sure to logout from all clients?");
+            if(!b){
+                return;
+            }
+
             const response=await fetch("/user_logout_all",{
                 method:"POST",
                 credentials:"include",

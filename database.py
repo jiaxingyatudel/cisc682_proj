@@ -113,6 +113,15 @@ class Database:
     def select_user_follow_join_user_info_by_user_id(self,user_id):
         return self.execute_sql(sql.sql_select_user_follow_join_user_info_by_user_id.format(user_id=user_id))
 
+    def check_user_follow_by_user_id(self,user_id,follow_id):
+        return self.execute_sql(sql.sql_check_user_follow_by_follow_id.format(user_id=user_id,follow_id=follow_id))
+
+    def insert_user_follow(self,user_id,follow_id):
+        return self.execute_sql(sql.sql_insert_user_follow.format(user_id=user_id,follow_id=follow_id))
+
+    def delete_user_follow_by_user_id_follow_id(self,user_id,follow_id):
+        return self.execute_sql(sql.sql_delete_user_follow_by_user_id_follow_id.format(user_id=user_id,follow_id=follow_id))
+
     #post_info
     #TODO
     def select_post_info_by_user_id(self,user_id):

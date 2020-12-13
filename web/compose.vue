@@ -49,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <top-bar title="Compose Recipe" v-bind:top_bar_search="false"></top-bar>
+        <top-bar v-bind:top_bar_search="false"><span>Compose Recipe</span></top-bar>
     </div>
 </template>
 
