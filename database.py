@@ -9,12 +9,13 @@ import time
 import sql
 
 class Database:
-    def __init__(self,database_user,database_password):
+    def __init__(self,database_host,database_user,database_password):
+        self.database_host=database_host
         self.database_user=database_user
         self.database_password=database_password
 
     def execute_sql(self,sql):
-        conn=pymysql.connect(host="localhost",user=self.database_user,password=self.database_password,database="cisc637",autocommit=True,cursorclass=pymysql.cursors.DictCursor)
+        conn=pymysql.connect(host=self.database_host,user=self.database_user,password=self.database_password,database="cisc637",autocommit=True,cursorclass=pymysql.cursors.DictCursor)
         cursor=conn.cursor()
         cursor.execute(sql)
         result=cursor.fetchall()
@@ -163,6 +164,7 @@ class Database:
     #TODO
 
 if __name__=="__main__":
+    database_host=input("[database host]")
     database_user=input("[database user name]")
     database_password=input("[database password]")
-    database=Database(database_user,database_password)
+    database=Database(database_host,database_user,database_password)

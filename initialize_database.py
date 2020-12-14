@@ -8,9 +8,10 @@ from pymysql.constants import CLIENT
 
 import sql
 
+database_host=input("[database host]")
 database_user=input("[database user name]")
 database_password=input("[database password]")
-conn=pymysql.connect(host="localhost",user=database_user,password=database_password,autocommit=True,client_flag=CLIENT.MULTI_STATEMENTS)
+conn=pymysql.connect(host=database_host,user=database_user,password=database_password,autocommit=True,client_flag=CLIENT.MULTI_STATEMENTS)
 cursor=conn.cursor()
 
 cursor.execute(sql.sql_create_tables)

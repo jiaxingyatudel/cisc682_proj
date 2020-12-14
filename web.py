@@ -14,9 +14,10 @@ import os
 
 from database import Database
 
+database_host=input("[database host]")
 database_user=input("[database user name]")
 database_password=input("[database password]")
-database=Database(database_user,database_password)
+database=Database(database_host,database_user,database_password)
 
 app=Flask(__name__,static_folder="./web/")
 

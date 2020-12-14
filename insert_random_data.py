@@ -99,9 +99,10 @@ comment_pool=CommentPool()
 tag_pool=TagPool()
 
 ###
+database_host=input("[database host]")
 database_user=input("[database user name]")
 database_password=input("[database password]")
-conn=pymysql.connect(host="localhost",user=database_user,password=database_password,database="cisc637",autocommit=True)
+conn=pymysql.connect(host=database_host,user=database_user,password=database_password,database="cisc637",autocommit=True)
 cursor=conn.cursor()
 
 #user_info

@@ -70,6 +70,14 @@ Webpage prototypes are made to be interactable, and can cover most of frequently
 
 ## Project Proposal and Presentation Slides
 
-* [Link to proposal document](./cisc682_proposal.pdf)
+* [Link to proposal document](./cisc682_proposal_final_rev.pdf)
 
 * [Link to presentation slides](./cisc682_presentation.pdf)
+
+## Implementation
+
+The project is implemented as a cross-platform web application. By following responsive webpage design principals, the web frontend can adaptively adjust its layout for different devices. We plan to use [Vue.js](https://vuejs.org) for the frontend framework and [Flask](https://flask.palletsprojects.com/en/1.1.x/) for backend framework.
+
+Users can register and manage their account (including setting up and change user name, email and password), and post, edit, delete recipes. For each recipe, the poster can append multiple tags to represent the feature of the recipe (for example, Asian, Mexican, Vegetarian), these tags can be added or removed at any time. All posted recipes can be searched by all users according to their tags, and search results will be presented in order of post time (the most recent at first). Readers of recipes can like a recipe, liked recipes will be listed in a personal liked list for future reference. Liked recipes can be removed from the list at any time.
+
+[Link to GitHub repository of this project](https://github.com/jiaxingyatudel/cisc682_proj)
